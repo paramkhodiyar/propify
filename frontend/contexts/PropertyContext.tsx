@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Property } from '@/types/property';
-import { mockProperties } from '@/data/mockProperties';
+// import { mockProperties } from '@/data/mockProperties';
 import api from '@/lib/api';
 
 interface PropertyContextType {

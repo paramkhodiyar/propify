@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// User Role Enum
+enum Role {
+  USER
+  AGENT
+  ADMIN
+}
+
+// Listing Type Enum
+enum ListingType {
+  SALE
+  RENT
+}
+
+enum PropertyType {
+  VILLA
+  APARTMENT
+  PENTHOUSE
+  HOUSE
+  COTTAGE
+  SUITE
+}
+
+// Listing Status Enum
+enum ListingStatus {
+  ACTIVE
+  SOLD
+  PENDING
+}
+
+model User {
+  id               Int      @id @default(autoincrement())
+  email            String   @unique
+  password         String
+  name             String
+  role             Role     @default(USER)
+  avatar           String?
+  phone            String?
+  bio              String?
+  aadharNumber     String?
+  isVerified       Boolean  @default(false)
+  upgradeRequested Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  listings      Listing[]
+  inquiriesSent Inquiry[]
+  savedListings SavedListing[]
+}
+
+model Listing {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String
+  price        Float
+  location     String
+  type         ListingType
+  propertyType PropertyType
+  bedrooms     Int
+  bathrooms    Int
+  area         Float
+  amenities    String[]
+  images       String[]
+  tags         String[]
+  status       ListingStatus @default(PENDING)
+  views        Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  inquiries     Inquiry[]
+  savedListings SavedListing[]
+}
+
+model Inquiry {
+  id        Int      @id @default(autoincrement())
+  message   String
+  listingId Int
+  userId    Int
+  createdAt DateTime @default(now())
+
+  listing Listing @relation(fields: [listingId], references: [id])
+  user    User    @relation(fields: [userId], references: [id]) // The sender
+}
+
+model SavedListing {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  listingId Int
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  listing Listing @relation(fields: [listingId], references: [id])
+
+  @@unique([userId, listingId])
+}

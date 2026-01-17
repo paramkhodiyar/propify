@@ -9,11 +9,11 @@ import { MapPin, Bed, Bath, Square, ChevronLeft, ChevronRight, Calendar, Send } 
 import { useProperties } from '@/contexts/PropertyContext';
 import { mockProperties } from '@/data/mockProperties';
 
-export async function generateStaticParams() {
-  return mockProperties.map((property) => ({
-    id: property.id,
-  }));
-}
+// export async function generateStaticParams() {
+//   return mockProperties.map((property) => ({
+//     id: property.id,
+//   }));
+// }
 
 export default function PropertyDetailPage() {
   const params = useParams();
@@ -193,7 +193,7 @@ export default function PropertyDetailPage() {
                   </>
                 )}
               </div>
-              
+
               {/* Image Thumbnails */}
               {property.images.length > 1 && (
                 <div className="flex space-x-2 overflow-x-auto">
@@ -201,9 +201,8 @@ export default function PropertyDetailPage() {
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
-                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden ${
-                        index === currentImageIndex ? 'ring-2 ring-amber-600' : ''
-                      }`}
+                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden ${index === currentImageIndex ? 'ring-2 ring-amber-600' : ''
+                        }`}
                     >
                       <img
                         src={image}
@@ -263,7 +262,7 @@ export default function PropertyDetailPage() {
             {/* Contact CTA */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Interested in this property?</h3>
-              
+
               {isEnquirySubmitted ? (
                 <div className="text-center py-8">
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">

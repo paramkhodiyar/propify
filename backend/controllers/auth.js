@@ -39,7 +39,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Check if user exists
+
         const user = await prisma.user.findUnique({
             where: { email },
         });
@@ -48,20 +48,19 @@ const login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid Credentials!' });
         }
 
-        // Check password
+
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
             return res.status(400).json({ message: 'Invalid Credentials!' });
         }
 
-        // Generate Token
-        const age = 1000 * 60 * 60 * 24 * 7; // 1 week
+        const age = 1000 * 60 * 60 * 24 * 7;
 
         const token = jwt.sign(
             {
                 id: user.id,
-                role: user.role, // useful payload
+                role: user.role,
             },
             process.env.JWT_SECRET_KEY,
             { expiresIn: age }
@@ -72,7 +71,7 @@ const login = async (req, res) => {
         res
             .cookie('token', token, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'PRODUCTION', // set to true in production
+                secure: process.env.NODE_ENV === 'PRODUCTION',
                 maxAge: age,
             })
             .status(200)

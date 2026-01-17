@@ -8,8 +8,8 @@ import { Toaster } from 'react-hot-toast';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Propify Real Estate - Properties in Chhattisgarh',
-  description: 'Find your dream property in Chhattisgarh with Propify Real Estate',
+  title: 'Propify Real Estate - Properties in India',
+  description: 'Find your dream property in India with Propify Real Estate',
 };
 
 export default function RootLayout({

@@ -239,7 +239,6 @@ export default function MayaAIPage() {
     );
 }
 
-/* Reusable field wrapper */
 function Field({ label, children }: FieldProps) {
     return (
         <div>

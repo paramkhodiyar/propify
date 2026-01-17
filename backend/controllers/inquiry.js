@@ -29,21 +29,46 @@ const addInquiry = async (req, res) => {
                 message,
             },
         });
-
+        console.log(process.env.ADMIN_EMAIL)
         // Send Email to Agent
         if (listing.user && listing.user.email) {
             const subject = `New Inquiry for ${listing.title}`;
             const text = `You have a new inquiry from ${sender.name} (${sender.email}):\n\n"${message}"\n\nView it on your dashboard.`;
             const html = `
-                <h3>New Inquiry Received</h3>
-                <p><strong>Property:</strong> ${listing.title}</p>
-                <p><strong>From:</strong> ${sender.name} (<a href="mailto:${sender.email}">${sender.email}</a>)</p>
-                <p><strong>Message:</strong></p>
-                <blockquote style="background: #f9f9f9; border-left: 10px solid #ccc; margin: 1.5em 10px; padding: 0.5em 10px;">
-                    ${message}
-                </blockquote>
-                <p><a href="http://localhost:3000/dashboard">Go to Dashboard</a></p>
-            `;
+                    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                        <h2 style="color:#f59e0b;">📩 New Property Inquiry</h2>
+
+                        <p>You have received a new inquiry for your property:</p>
+
+                        <table style="border-collapse: collapse; margin-top: 10px;">
+                        <tr>
+                            <td style="padding: 6px 10px;"><strong>Property:</strong></td>
+                            <td style="padding: 6px 10px;">${listing.title}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px 10px;"><strong>From:</strong></td>
+                            <td style="padding: 6px 10px;">${sender.name} (${sender.email})</td>
+                        </tr>
+                        </table>
+
+                        <h4>Message:</h4>
+                        <div style="background:#f9f9f9; border-left:4px solid #f59e0b; padding:12px; margin:10px 0;">
+                        ${message.replace(/\n/g, "<br>")}
+                        </div>
+
+                        <p>
+                        👉 <a href="https://propify-gamma.vercel.app/dashboard" style="color:#f59e0b; font-weight:bold;">
+                            View in Dashboard
+                        </a>
+                        </p>
+
+                        <hr/>
+                        <p style="font-size:12px;color:#777;">
+                        This email was sent by Propify Real Estate Platform.
+                        </p>
+                    </div>
+                    `;
+
 
             await sendEmail(listing.user.email, subject, text, html);
         }

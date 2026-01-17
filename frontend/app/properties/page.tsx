@@ -8,8 +8,12 @@ import Loading from '@/components/loader';
 import SavedListingButton from '@/components/SavedListingButton';
 import { Search, Filter, MapPin, Bed, Bath, Square, X, Send, Eye } from 'lucide-react';
 import { useProperties } from '@/contexts/PropertyContext';
+import api from '@/lib/api';
+import { toast } from 'react-hot-toast';
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function PropertiesPage() {
+  const { user } = useAuth();
   const { properties, loading } = useProperties();
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [searchFilters, setSearchFilters] = useState({
@@ -129,14 +133,43 @@ export default function PropertiesPage() {
     }));
   };
 
-  const handleEnquirySubmit = (e: React.FormEvent) => {
+  const handleEnquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsEnquirySubmitted(true);
-    setTimeout(() => {
-      setIsEnquirySubmitted(false);
-      setEnquiryForm({ name: '', email: '', phone: '', message: '' });
-    }, 3000);
+
+    if (!user) {
+      toast.error("Please login to send enquiry");
+      return;
+    }
+
+    if (!selectedProperty) return;
+
+    try {
+      await api.post("/inquiries", {
+        listingId: selectedProperty.id,
+        message: `
+Name: ${enquiryForm.name}
+Email: ${enquiryForm.email}
+Phone: ${enquiryForm.phone}
+
+${enquiryForm.message}
+      `.trim()
+      });
+
+      setIsEnquirySubmitted(true);
+      toast.success("Enquiry sent successfully!");
+
+      setTimeout(() => {
+        setIsEnquirySubmitted(false);
+        setEnquiryForm({ name: "", email: "", phone: "", message: "" });
+        closeQuickView();
+      }, 2000);
+
+    } catch (err: any) {
+      console.error("Failed to send enquiry", err);
+      toast.error(err.response?.data?.message || "Failed to send enquiry");
+    }
   };
+
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-IN', {

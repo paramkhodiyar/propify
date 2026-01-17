@@ -4,8 +4,28 @@ import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
+interface FormData {
+    city: string;
+    location: string;
+    property_type: string;
+    bedrooms: number;
+    bathrooms: number;
+    balconies: number;
+    area_sqft: number;
+    floor_num: number;
+    total_floor: number;
+    age: number;
+    furnish: number;
+    facing: number;
+}
+
+interface FieldProps {
+    label: string;
+    children: React.ReactNode;
+}
+
 export default function MayaAIPage() {
-    const [form, setForm] = useState({
+    const [form, setForm] = useState<FormData>({
         city: "gurgaon",
         location: "",
         property_type: "apartment",
@@ -21,10 +41,10 @@ export default function MayaAIPage() {
     });
 
     const [loading, setLoading] = useState(false);
-    const [price, setPrice] = useState(null);
+    const [price, setPrice] = useState<number | null>(null);
     const [error, setError] = useState("");
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setForm((prev) => ({
             ...prev,
@@ -34,7 +54,7 @@ export default function MayaAIPage() {
         }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError("");
@@ -220,7 +240,7 @@ export default function MayaAIPage() {
 }
 
 /* Reusable field wrapper */
-function Field({ label, children }) {
+function Field({ label, children }: FieldProps) {
     return (
         <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">

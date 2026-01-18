@@ -1,15 +1,15 @@
 const { sendEmail } = require('../lib/mail');
 
 const sendContactMessage = async (req, res) => {
-    const { name, email, subject, message } = req.body;
+  const { name, email, subject, message } = req.body;
 
-    try {
-        // Send email to Admin
-        const adminEmail = process.env.ADMIN_EMAIL || 'admin@mayarealestate.in'; // Ensure this is set or fallback
+  try {
 
-        const emailSubject = `New Contact Form Submission: ${subject}`;
-        const text = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
-        const html = `
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@mayarealestate.in';
+
+    const emailSubject = `New Contact Form Submission: ${subject}`;
+    const text = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+    const html = `
   <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
     <h2 style="color:#f59e0b;">📨 New Contact Form Submission</h2>
     <h3>You are the admin owner of Propify Website, you can ignore this email</h3>
@@ -40,25 +40,23 @@ const sendContactMessage = async (req, res) => {
   </div>
 `;
 
-        await sendEmail(adminEmail, emailSubject, text, html);
-
-        // Send auto-reply to user?
-        const autoReplySubject = "Thank you for your message";
-        const autoReplyText = "Thank you for your message. We will get back to you as soon as possible.";
-        const autoReplyHtml = `
+    await sendEmail(adminEmail, emailSubject, text, html);
+    const autoReplySubject = "Thank you for your message";
+    const autoReplyText = "Thank you for your message. We will get back to you as soon as possible.";
+    const autoReplyHtml = `
             <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
                 <h2 style="color:#f59e0b;">Thank you for your message</h2>
                 <p>Thank you for your message. We will get back to you as soon as possible.</p>
             </div>
         `;
-        await sendEmail(email, autoReplySubject, autoReplyText, autoReplyHtml);
+    await sendEmail(email, autoReplySubject, autoReplyText, autoReplyHtml);
 
 
-        res.status(200).json({ message: 'Message sent successfully' });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: 'Failed to send message' });
-    }
+    res.status(200).json({ message: 'Message sent successfully' });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Failed to send message' });
+  }
 };
 
 module.exports = { sendContactMessage };

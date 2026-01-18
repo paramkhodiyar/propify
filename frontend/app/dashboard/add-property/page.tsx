@@ -113,8 +113,6 @@ export default function AddPropertyPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    // Validation
     const titleRegex = /^[a-zA-Z0-9\s]+$/;
     if (!titleRegex.test(formData.title)) {
       toast.error("Property Title should not contain special characters");
@@ -140,11 +138,11 @@ export default function AddPropertyPage() {
         bedrooms: parseInt(formData.bedrooms),
         bathrooms: parseInt(formData.bathrooms),
         area: parseInt(formData.area),
-        type: formData.type, // 'SALE' | 'RENT'
-        propertyType: formData.propertyType, // 'VILLA' | 'APARTMENT' etc.
+        type: formData.type,
+        propertyType: formData.propertyType,
         amenities: formData.amenities,
         tags: formData.tags,
-        images: finalImages // All images for gallery
+        images: finalImages
       };
 
       await addProperty(propertyData as any);
@@ -225,7 +223,6 @@ export default function AddPropertyPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Basic Information */}
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Basic Information</h2>
 
@@ -478,8 +475,6 @@ export default function AddPropertyPage() {
               ))}
             </div>
           </div>
-
-          {/* Submit Button */}
           <div className="flex justify-end space-x-4">
             <Link
               href="/dashboard"

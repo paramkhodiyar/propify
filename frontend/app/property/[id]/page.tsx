@@ -7,13 +7,7 @@ import { Footer } from '@/components/Footer';
 import { Property } from '@/types/property';
 import { MapPin, Bed, Bath, Square, ChevronLeft, ChevronRight, Calendar, Send } from 'lucide-react';
 import { useProperties } from '@/contexts/PropertyContext';
-// import { mockProperties } from '@/data/mockProperties';
 
-// export async function generateStaticParams() {
-//   return mockProperties.map((property) => ({
-//     id: property.id,
-//   }));
-// }
 
 export default function PropertyDetailPage() {
   const params = useParams();

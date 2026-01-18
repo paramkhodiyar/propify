@@ -1,13 +1,11 @@
 const prisma = require('../lib/prisma');
 
 const getAdminStats = async (req, res) => {
-    // Only Admin
+
     try {
         const totalUsers = await prisma.user.count();
         const totalListings = await prisma.listing.count();
         const totalInquiries = await prisma.inquiry.count();
-
-        // Example activity feed (latest 5)
         const recentListings = await prisma.listing.findMany({
             take: 5,
             orderBy: { createdAt: 'desc' },
@@ -41,7 +39,7 @@ const getAgentStats = async (req, res) => {
             }
         });
 
-        // Views aggregation? Schema has `views` on Listing.
+
         const viewsData = await prisma.listing.aggregate({
             where: { userId: tokenUserId },
             _sum: {

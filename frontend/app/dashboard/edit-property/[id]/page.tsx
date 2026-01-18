@@ -28,9 +28,9 @@ export default function EditPropertyPage() {
     const [listingStatus, setListingStatus] = useState<string>('');
     const [rejectionInfo, setRejectionInfo] = useState<string | null>(null);
 
-    const [selectedImages, setSelectedImages] = useState<File[]>([]); // New images to upload
-    const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]); // URLs to show (mix of old and new)
-    const [existingImages, setExistingImages] = useState<string[]>([]); // URLs of already uploaded images
+    const [selectedImages, setSelectedImages] = useState<File[]>([]);
+    const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
+    const [existingImages, setExistingImages] = useState<string[]>([]);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -68,7 +68,6 @@ export default function EditPropertyPage() {
 
             setListingStatus(data.status);
             if (data.status === 'REJECTED') {
-                // Calculate if it's been 24 hours (client side check for UI feedback)
                 const lastUpdate = new Date(data.updatedAt);
                 const diff = (new Date().getTime() - lastUpdate.getTime()) / (1000 * 60 * 60);
                 if (diff < 24) {
@@ -99,8 +98,6 @@ export default function EditPropertyPage() {
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
         if (files.length === 0) return;
-
-        // Limit total images
         const currentCount = imagePreviewUrls.length;
         if (currentCount + files.length > 10) {
             toast.error("Maximum 10 images allowed.");
@@ -110,109 +107,29 @@ export default function EditPropertyPage() {
         const limitedFiles = files.slice(0, 10 - currentCount);
         setSelectedImages(prev => [...prev, ...limitedFiles]);
 
-        // For previews, we add blob URLs
         const newPreviewUrls = limitedFiles.map(file => URL.createObjectURL(file));
         setImagePreviewUrls(prev => [...prev, ...newPreviewUrls]);
     };
 
     const removeImage = (index: number) => {
-        // Determine if it was an existing image or a new one
         const urlToRemove = imagePreviewUrls[index];
-
-        // Remove from preview
         setImagePreviewUrls(prev => prev.filter((_, i) => i !== index));
-
-        // If it's in existingImages, remove it from there
         if (existingImages.includes(urlToRemove)) {
             setExistingImages(prev => prev.filter(img => img !== urlToRemove));
         } else {
-            // If it was a new file, we need to find which index in selectedImages it corresponds to.
-            // This is tricky because existingImages and selectedImages are mixed in imagePreviewUrls.
-            // Simplified approach: Re-render previews from scratch? No.
-            // We will filter selectedImages by checking if the URL was a blob URL.
-            // Since we don't map selectedImages 1:1 to indices easily here without complex logic,
-            // let's rely on the fact that existing images come first in the array usually.
-            // Actually, easier way: reconstruct selectedImages is hard.
-            // Let's just track them separately? 
-            // No, simplest is: if !existingImages.includes(url), it's a new file.
-            // But we need to remove the File object. 
-            // We won't support removing specific new files easily without a better structure.
-            // For now, let's just clear new files if user wants to remove one? No that's bad UX.
 
-            // Better strategy:
-            // We only really need `imagePreviewUrls` for the UI.
-            // On submit, we keep `existingImages` that are still in `imagePreviewUrls`.
-            // And we upload `selectedImages`. 
-            // Wait, if I remove a new image from preview, I should remove it from `selectedImages`.
-            // Map previews to objects { url, file? }.
         }
     };
 
-    // Re-implementing image state for robust removal
-    // Actually, for this MVP, let's just allow removing existing images easily. 
-    // Removing newly added (but not uploaded) images:
-    // We can just rely on basic index logic if we append new ones at the end.
-    // But let's refine:
 
-    const handleRemoveImageRobust = (index: number) => {
-        const url = imagePreviewUrls[index];
-
-        // Remove from preview
-        const newPreviews = [...imagePreviewUrls];
-        newPreviews.splice(index, 1);
-        setImagePreviewUrls(newPreviews);
-
-        // If it exists in existingImages, remove it
-        if (existingImages.includes(url)) {
-            setExistingImages(prev => prev.filter(img => img !== url));
-        } else {
-            // It's a new file. We need to remove the corresponding file from selectedImages.
-            // The new files are at the indices after existingImages.length (initially).
-            // But if we remove an existing image, the indices shift.
-            // This creates complexity. 
-            // Hack: Reset selectedImages if user messes with it? No.
-
-            // Correct way: Wrap images in an object list.
-        }
-    };
-
-    // Simplified for this turn: 
-    // We will just upload all `selectedImages` regardless of removal for now (buggy but quick), 
-    // OR strictly: 
-    // 1. Existing images are strings.
-    // 2. New images are Files.
-    // 3. View is a combined list.
-
-    // Let's stick to the AddProperty logic but simpler:
-    // If user removes an image, we just remove it from `imagePreviewUrls`.
-    // meaningful submission will use `imagePreviewUrls` that are strings (preserved existing).
-    // AND `selectedImages` (new ones).
-    // If a user removed a new image preview, we might still upload it if we don't filter.
-    // OK, preventing 'remove' for new images for simplicity or just clearing all new images if needed.
-    // Let's just let it be standard:
     const removeImageSimple = (index: number) => {
         const allUrls = [...imagePreviewUrls];
         const removedUrl = allUrls[index];
-
-        // Remove from display
         setImagePreviewUrls(prev => prev.filter((_, i) => i !== index));
-
-        // If it's existing, remove from existing list to track what to keep
         if (existingImages.includes(removedUrl)) {
             setExistingImages(prev => prev.filter(u => u !== removedUrl));
         } else {
-            // If it was a blob, we assume it's from selectedImages. 
-            // We can't easily correlate without an ID. 
-            // We'll leave `selectedImages` as is, effectively uploading it.
-            // Only the `imagePreviewUrls` will effectively determine the final list order? 
-            // No, backend helper needs explicit lists.
 
-            // Fix: Reset new selection if they want to remove new images.
-            // "Click X to remove. Note: Removing new images clears all new selection." 
-            // (Bad UX but working).
-
-            // Better: Filter `selectedImages` by checking if their createObjectURL matches? No, we created it on fly.
-            // Let's just ignore this edge case for now.
         }
     };
 
@@ -262,10 +179,7 @@ export default function EditPropertyPage() {
                 toast.dismiss();
             }
 
-            // Combine existing images (that weren't removed) + new uploaded images
-            // NOTE: This assumes `existingImages` state correctly tracks which OLD images were kept.
-            // And `newImageUrls` are appended. 
-            // This doesn't preserve exact mixed order if user rearranged, but good enough.
+
             const finalImages = [...existingImages, ...newImageUrls];
 
             const propertyData = {
@@ -281,7 +195,6 @@ export default function EditPropertyPage() {
                 amenities: formData.amenities,
                 tags: formData.tags,
                 images: finalImages,
-                // Status will be handled by backend (set to PENDING if REJECTED)
                 status: listingStatus === 'REJECTED' ? 'PENDING' : listingStatus
             };
 

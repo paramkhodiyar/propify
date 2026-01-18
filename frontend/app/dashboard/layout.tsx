@@ -14,7 +14,6 @@ export default function DashboardLayout({
             <Navbar />
 
             <div className="flex flex-1 max-w-7xl mx-auto w-full">
-                {/* Sidebar - Hidden on mobile, should implement mobile drawer later if needed */}
                 <div className="hidden md:block">
                     <Sidebar />
                 </div>

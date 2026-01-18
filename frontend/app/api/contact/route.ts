@@ -1,4 +1,4 @@
-// app/api/contact/route.ts
+
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
@@ -11,14 +11,14 @@ interface ContactFormData {
 
 export async function POST(request: NextRequest) {
   try {
-    // Add more detailed logging
+
     console.log('Contact API called');
 
     const body: ContactFormData = await request.json();
     console.log('Request body parsed:', { ...body, message: body.message?.substring(0, 50) + '...' });
     const { name, email, subject, message } = body;
 
-    // Validate required fields
+
     if (!name || !email || !subject || !message) {
       return NextResponse.json(
         { message: 'All fields are required' },
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check environment variables
+
     console.log('Environment check:', {
       EMAIL_USER: !!process.env.EMAIL_USER,
       EMAIL_PASS: !!process.env.EMAIL_PASS,
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create transporter with better error handling
+
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -53,10 +53,8 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // Verify transporter configuration
     await transporter.verify();
 
-    // Email to you (admin notification)
     const adminMailOptions = {
       from: process.env.EMAIL_USER,
       to: process.env.ADMIN_EMAIL || process.env.EMAIL_USER,
@@ -88,7 +86,6 @@ export async function POST(request: NextRequest) {
       `,
     };
 
-    // Confirmation email to user
     const userMailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
@@ -142,7 +139,6 @@ export async function POST(request: NextRequest) {
       `,
     };
 
-    // Send both emails
     console.log('Sending emails...');
     await Promise.all([
       transporter.sendMail(adminMailOptions),
@@ -164,7 +160,6 @@ export async function POST(request: NextRequest) {
       stack: error.stack
     });
 
-    // Return a more specific error message
     let errorMessage = 'Failed to send email';
     if (error.code === 'EAUTH') {
       errorMessage = 'Email authentication failed. Please check your email credentials.';
@@ -181,7 +176,6 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Handle other HTTP methods
 export async function GET() {
   return NextResponse.json(
     { message: 'Method not allowed' },

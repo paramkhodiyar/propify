@@ -6,7 +6,7 @@ const register = async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
-        // Check if user exists
+
         const existingUser = await prisma.user.findUnique({
             where: { email },
         });
@@ -15,10 +15,8 @@ const register = async (req, res) => {
             return res.status(400).json({ message: 'User already exists' });
         }
 
-        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create user
         const newUser = await prisma.user.create({
             data: {
                 name,

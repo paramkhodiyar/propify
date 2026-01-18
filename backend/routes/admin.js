@@ -4,7 +4,7 @@ const { approveUser, rejectUser, approveListing, rejectListing, getPendingUsers,
 
 const router = express.Router();
 
-// All routes require Admin role
+
 router.use(verifyToken, authorizeRoles('ADMIN'));
 
 router.get('/pending-users', getPendingUsers);
@@ -13,7 +13,7 @@ router.post('/users/:id/reject', rejectUser);
 
 
 router.get('/pending-listings', getPendingListings);
-router.get('/all-listings', getAllListings); // New route
+router.get('/all-listings', getAllListings);
 router.post('/listings/:id/approve', approveListing);
 router.post('/listings/:id/reject', rejectListing);
 

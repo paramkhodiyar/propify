@@ -16,5 +16,5 @@ export interface Property {
   propertyType: PropertyType;
   amenities: string[];
   images: string[];
-  publishedAt: string; // ISO date string
+  publishedAt: string; 
 }

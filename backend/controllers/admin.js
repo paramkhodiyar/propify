@@ -2,17 +2,13 @@ const prisma = require('../lib/prisma');
 
 const approveUser = async (req, res) => {
     const id = parseInt(req.params.id);
-    // Role change usually implies AGENT, but could be SELLER provided by req.body or defaulted.
-    // User asked for "upgrade to seller account", current Roles are USER, AGENT, ADMIN. 
-    // I'll assume they become AGENT.
-
     try {
         const updatedUser = await prisma.user.update({
             where: { id },
             data: {
                 isVerified: true,
                 upgradeRequested: false,
-                role: 'AGENT' // Promoting to AGENT
+                role: 'AGENT' 
             }
         });
         res.status(200).json({ message: 'User approved and upgraded to Agent', user: updatedUser });
@@ -29,7 +25,7 @@ const rejectUser = async (req, res) => {
             where: { id },
             data: {
                 upgradeRequested: false,
-                // Optional: clear aadhar or keep for record? Keeping for now.
+                
             }
         });
         res.status(200).json({ message: 'User upgrade rejected' });

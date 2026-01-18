@@ -26,7 +26,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       }
 
       if (!allowedRoles.includes(user.role)) {
-        // Redirect based on user role
         if (user.role === 'visitor') {
           router.push('/');
         } else {

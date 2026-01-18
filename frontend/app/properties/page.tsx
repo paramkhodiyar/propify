@@ -42,20 +42,14 @@ export default function PropertiesPage() {
 
   useEffect(() => {
     let filtered = properties;
-
-    // Location filter
     if (searchFilters.location) {
       filtered = filtered.filter(property =>
         property.location.toLowerCase().includes(searchFilters.location.toLowerCase())
       );
     }
-
-    // Type filter
     if (searchFilters.type) {
       filtered = filtered.filter(property => property.propertyType === searchFilters.type);
     }
-
-    // Price range filter
     if (searchFilters.minPrice) {
       filtered = filtered.filter(property =>
         property.price >= parseInt(searchFilters.minPrice)
@@ -66,21 +60,16 @@ export default function PropertiesPage() {
         property.price <= parseInt(searchFilters.maxPrice)
       );
     }
-
-    // Bedrooms filter
     if (searchFilters.bedrooms) {
       filtered = filtered.filter(property =>
         property.bedrooms >= parseInt(searchFilters.bedrooms)
       );
     }
-
-    // Bathrooms filter
     if (searchFilters.bathrooms) {
       filtered = filtered.filter(property =>
         property.bathrooms >= parseInt(searchFilters.bathrooms)
       );
     }
-
     setFilteredProperties(filtered);
   }, [searchFilters, properties]);
 

@@ -43,8 +43,6 @@ export default function DashboardPage() {
 
       const response = await api.get(endpoint);
       const data = response.data;
-
-      // Map data if needed (similar to context)
       const mappedProperties: Property[] = data.map((item: any) => ({
         id: item.id.toString(),
         title: item.title,
@@ -61,7 +59,7 @@ export default function DashboardPage() {
         amenities: item.amenities || [],
         images: item.images || [],
         publishedAt: item.createdAt,
-        status: item.status // Include status for display
+        status: item.status
       }));
 
       setProperties(mappedProperties);
@@ -123,17 +121,16 @@ export default function DashboardPage() {
 
 
 
-  // Stats Calculation (Personalized based on fetched data)
+
   const totalProperties = properties.length;
-  const newProperties = properties.filter(p => p.tags?.includes('new')).length; // Or logic based on date
+  const newProperties = properties.filter(p => p.tags?.includes('new')).length;
   const soldProperties = properties.filter(p => (p as any).status === 'SOLD').length;
-  const activeProperties = properties.filter(p => (p as any).status === 'ACTIVE').length; // Or pending logic
+  const activeProperties = properties.filter(p => (p as any).status === 'ACTIVE').length;
 
   return (
     <div className="min-h-screen bg-gray-50">
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -152,7 +149,7 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        {/* Stats */}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-amber-500">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Total Listed</h3>
@@ -279,7 +276,7 @@ export default function DashboardPage() {
                           </Link>
 
                           <Link
-                            href={`/dashboard/edit-property/${property.id}`} // Assuming we'll make this
+                            href={`/dashboard/edit-property/${property.id}`}
                             className="text-amber-600 hover:text-amber-900 p-1 rounded-full hover:bg-amber-50 transition-colors"
                             title="Edit Property"
                           >

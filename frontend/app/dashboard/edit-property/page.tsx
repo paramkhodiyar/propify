@@ -14,12 +14,8 @@ export default function EditPropertyPage() {
     const [properties, setProperties] = useState<Property[]>([]);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
-
-    // Modal state
     const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // Form state (copied from AddProperty/EditProperty[id])
     const [formData, setFormData] = useState({
         title: '',
         price: '',
@@ -72,7 +68,7 @@ export default function EditPropertyPage() {
                 images: item.images || [],
                 publishedAt: item.createdAt,
                 status: item.status,
-                updatedAt: item.updatedAt // Needed for rejection logic
+                updatedAt: item.updatedAt
             }));
             setProperties(mappedProperties);
         } catch (error) {
@@ -85,7 +81,6 @@ export default function EditPropertyPage() {
 
     const handleEditClick = (property: any) => {
         setSelectedProperty(property);
-        // Populate form
         setFormData({
             title: property.title,
             price: property.price.toString(),
@@ -116,7 +111,7 @@ export default function EditPropertyPage() {
 
         setImagePreviewUrls(property.images || []);
         setExistingImages(property.images || []);
-        setSelectedImages([]); // Clear previous new uploads
+        setSelectedImages([]);
         setIsModalOpen(true);
     };
 
@@ -124,12 +119,9 @@ export default function EditPropertyPage() {
         setIsModalOpen(false);
         setSelectedProperty(null);
     };
-
-    // Form handlers
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
-
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
         if (files.length === 0) return;
@@ -149,12 +141,7 @@ export default function EditPropertyPage() {
         if (existingImages.includes(urlToRemove)) {
             setExistingImages(prev => prev.filter(img => img !== urlToRemove));
         } else {
-            // If removing a new image, we can't easily sync with selectedImages File list without index tracking complexity.
-            // For simplify, we just remove visual preview. 
-            // Ideally we should filter selectedImages, but for this quick implementation we'll rely on backend handling or just accepting it might upload unused files if user adds then removes carefully.
-            // Actually, let's keep it simple: we upload ALL selectedImages, but we only Submit the URLs derived from them? No backend needs file.
-            // UX Tradeoff: Removing a new image might not stop it from uploading if implemented naively, but form submission constructs the array.
-            // See 'handleSubmit' for logic.
+
         }
     };
 
@@ -204,16 +191,7 @@ export default function EditPropertyPage() {
                 toast.dismiss();
             }
 
-            // Construct final images list:
-            // We want to keep existing images that are still in 'imagePreviewUrls'.
-            // And append new uploaded images.
-            // Note: If user removed a new image from preview, we shouldn't include it. 
-            // But we uploaded ALL selectedImages. 
-            // We can't easily map back. So we will append all new uploads.
-            // (Minor drawback: if user added 5, removed 1 from view, we still upload 5 and save 5 listing references? 
-            //  Actually we save what we send in JSON. We send `finalImages`.
-            //  So we need to know WHICH of `newImageUrls` to keep? 
-            //  We'll assume all valid uploads are kept for now.)
+
 
             const finalImages = [...existingImages, ...newImageUrls];
 
@@ -237,7 +215,7 @@ export default function EditPropertyPage() {
 
             toast.success("Property Updated Successfully!");
             setIsModalOpen(false);
-            fetchData(); // Refresh list
+            fetchData();
 
         } catch (error: any) {
             console.error('Error updating property:', error);

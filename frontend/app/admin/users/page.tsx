@@ -22,7 +22,7 @@ export default function AdminUsersPage() {
 
     const fetchUsers = async () => {
         try {
-            const res = await api.get('/users'); // Uses existing deleteUser route
+            const res = await api.get('/users');
             setUsers(res.data);
         } catch (error) {
             console.error("Error fetching users", error);
@@ -48,11 +48,6 @@ export default function AdminUsersPage() {
         }
     };
 
-    /*
-    const handleDelete = async (id: number) => {
-         // ... kept for reference or removed
-    };
-    */
 
     if (loading) {
         return (

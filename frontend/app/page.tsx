@@ -36,12 +36,12 @@ export default function HomePage() {
         property.tags.includes(selectedTag)
       ));
     }
-    setCurrentPage(1); // Reset to first page when filter changes
+    setCurrentPage(1); 
   }, [selectedTag, properties]);
 
   const tags = ['all', 'new', 'fast-filling', 'sold-out', 'trending'];
 
-  // Pagination logic
+
   const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
   const startIndex = (currentPage - 1) * propertiesPerPage;
   const endIndex = startIndex + propertiesPerPage;

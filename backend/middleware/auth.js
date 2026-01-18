@@ -36,7 +36,7 @@ const authorizeRoles = (...roles) => {
                 return res.status(403).json({ message: 'Access Denied! Insufficient Permissions.' });
             }
 
-            req.user = user; // Attach full user object to request if needed
+            req.user = user;
             next();
         } catch (error) {
             console.error("Authorization Error:", error);

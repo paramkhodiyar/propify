@@ -1,4 +1,3 @@
-// app/login/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -8,7 +7,8 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { User, Lock, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
+import toast from 'react-hot-toast';
+
 
 export default function LoginPage() {
   const [credentials, setCredentials] = useState({
@@ -19,9 +19,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const { login } = useAuth();
-  const { toast } = useToast();
   const router = useRouter();
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCredentials({
       ...credentials,
@@ -35,15 +33,7 @@ export default function LoginPage() {
 
     try {
       await login(credentials.email, credentials.password);
-
-      toast({
-        title: "Login Successful",
-        description: "Welcome back to Propify Real Estate!",
-        variant: "default"
-      });
-
-      // Redirect will be handled by the auth context based on user role
-
+      toast.success("Login Successful");
     } catch (error: any) {
       console.error('Login error:', error);
 
@@ -59,11 +49,7 @@ export default function LoginPage() {
         errorMessage = 'Too many failed attempts. Please try again later';
       }
 
-      toast({
-        title: "Login Failed",
-        description: errorMessage,
-        variant: "destructive"
-      });
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -75,17 +61,9 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      toast({
-        title: "Demo Login Successful",
-        description: "Welcome to Propify Real Estate!",
-        variant: "default"
-      });
+      toast.success("Demo Login Successful");
     } catch (error) {
-      toast({
-        title: "Demo Login Failed",
-        description: "Please check if demo accounts are set up correctly",
-        variant: "destructive"
-      });
+      toast.error("Demo Login Failed");
     } finally {
       setIsLoading(false);
     }

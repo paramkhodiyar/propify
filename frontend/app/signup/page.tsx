@@ -30,9 +30,7 @@ export default function SignupPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        // Email validation
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail|outlook|icloud|yahoo|hotmail)\.com$/;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail|outlook|icloud|yahoo|hotmail|edu)\.com$|\.in$/;
         if (!emailRegex.test(formData.email)) {
             toast.error("Please use a valid email address (@gmail.com, @outlook.com, etc.)");
             return;

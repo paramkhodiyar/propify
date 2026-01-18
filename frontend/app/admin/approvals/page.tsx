@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useToast } from "@/hooks/use-toast"
+import toast from 'react-hot-toast';
 import DashboardLayout from '@/app/dashboard/layout';
 import { Check, X, Loader2 } from 'lucide-react';
 import api from '@/lib/api';
@@ -28,7 +28,7 @@ interface PendingListing {
 }
 
 export default function AdminApprovalsPage() {
-    const { toast } = useToast();
+
     const [users, setUsers] = useState<PendingUser[]>([]);
     const [listings, setListings] = useState<PendingListing[]>([]);
     const [loading, setLoading] = useState(true);
@@ -44,11 +44,8 @@ export default function AdminApprovalsPage() {
             setListings(listingsRes.data);
         } catch (error) {
             console.error("Error fetching admin data", error);
-            toast({
-                title: "Error",
-                description: "Failed to load pending approvals",
-                variant: "destructive"
-            });
+            toast.error("Failed to load pending approvals");
+
         } finally {
             setLoading(false);
         }
@@ -62,17 +59,10 @@ export default function AdminApprovalsPage() {
         setActionLoading(id);
         try {
             await api.post(`/admin/users/${id}/${action}`);
-            toast({
-                title: "Success",
-                description: `User ${action}d successfully`
-            });
+            toast.success(`User ${action}d successfully`);
             setUsers(prev => prev.filter(u => u.id !== id));
         } catch (error) {
-            toast({
-                title: "Error",
-                description: `Failed to ${action} user`,
-                variant: "destructive"
-            });
+            toast.error(`Failed to ${action} user`);
         } finally {
             setActionLoading(null);
         }
@@ -80,19 +70,12 @@ export default function AdminApprovalsPage() {
 
     const handleListingAction = async (id: number, action: 'approve' | 'reject') => {
         setActionLoading(id);
-        try { // Note: Reject route might not be implemented fully in backend as strict DELETE, but approved is.
-            await api.post(`/admin/listings/${id}/${action}`); // Backend needs to support reject
-            toast({
-                title: "Success",
-                description: `Listing ${action}d successfully`
-            });
+        try {
+            await api.post(`/admin/listings/${id}/${action}`);
+            toast.success(`Listing ${action}d successfully`);
             setListings(prev => prev.filter(l => l.id !== id));
         } catch (error) {
-            toast({
-                title: "Error",
-                description: `Failed to ${action} listing`,
-                variant: "destructive"
-            });
+            toast.error(`Failed to ${action} listing`);
         } finally {
             setActionLoading(null);
         }

@@ -9,7 +9,7 @@ const addInquiry = async (req, res) => {
     try {
         const listing = await prisma.listing.findUnique({
             where: { id: parseInt(listingId) },
-            include: { user: true } // Include owner details
+            include: { user: true }
         });
 
         if (!listing) {
@@ -30,7 +30,6 @@ const addInquiry = async (req, res) => {
             },
         });
         console.log(process.env.ADMIN_EMAIL)
-        // Send Email to Agent
         if (listing.user && listing.user.email) {
             const subject = `New Inquiry for ${listing.title}`;
             const text = `You have a new inquiry from ${sender.name} (${sender.email}):\n\n"${message}"\n\nView it on your dashboard.`;
@@ -88,7 +87,7 @@ const getInquiries = async (req, res) => {
         let inquiries;
 
         if (role === 'AGENT' || role === 'ADMIN') {
-            // Get inquiries for listings owned by this agent
+
             inquiries = await prisma.inquiry.findMany({
                 where: {
                     listing: {
@@ -105,14 +104,14 @@ const getInquiries = async (req, res) => {
                 }
             });
         } else {
-            // Get inquiries sent by this user
+
             inquiries = await prisma.inquiry.findMany({
                 where: {
                     userId: tokenUserId
                 },
                 include: {
                     listing: {
-                        select: { title: true, id: true, location: true, price: true, image: true } // Assuming image is part of model? Checking schema... it is images[]
+                        select: { title: true, id: true, location: true, price: true, image: true } 
                     }
                 }
             });

@@ -18,7 +18,6 @@ export default function MyListingsPage() {
     const router = useRouter();
 
     useEffect(() => {
-        // Check authentication and role
         if (!authLoading) {
             if (!user || (user.role !== 'admin' && user.role !== 'agent')) {
                 router.push('/login');

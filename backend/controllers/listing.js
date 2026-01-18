@@ -117,7 +117,7 @@ const updateListing = async (req, res) => {
 
         let newStatus = listing.status;
 
-        // Re-application logic for Rejected listings
+
         if (listing.status === 'REJECTED') {
             const lastUpdated = new Date(listing.updatedAt);
             const now = new Date();
@@ -129,7 +129,7 @@ const updateListing = async (req, res) => {
                     message: `Application rejected. You can re-apply in ${remaining} hours.`
                 });
             }
-            newStatus = 'PENDING'; // Auto re-apply
+            newStatus = 'PENDING';
         }
 
         const allowedFields = [
@@ -153,7 +153,7 @@ const updateListing = async (req, res) => {
             if (req.body[key] !== undefined) data[key] = req.body[key];
         }
 
-        // Force status change if re-applying
+
         if (listing.status === 'REJECTED' && newStatus === 'PENDING') {
             data.status = 'PENDING';
         }

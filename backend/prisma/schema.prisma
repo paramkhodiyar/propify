@@ -6,14 +6,12 @@ datasource db {
   provider = "postgresql"
 }
 
-// User Role Enum
 enum Role {
   USER
   AGENT
   ADMIN
 }
 
-// Listing Type Enum
 enum ListingType {
   SALE
   RENT
@@ -28,7 +26,6 @@ enum PropertyType {
   SUITE
 }
 
-// Listing Status Enum
 enum ListingStatus {
   ACTIVE
   SOLD
@@ -90,7 +87,7 @@ model Inquiry {
   createdAt DateTime @default(now())
 
   listing Listing @relation(fields: [listingId], references: [id])
-  user    User    @relation(fields: [userId], references: [id]) // The sender
+  user    User    @relation(fields: [userId], references: [id]) 
 }
 
 model SavedListing {

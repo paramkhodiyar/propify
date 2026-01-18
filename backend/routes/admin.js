@@ -15,6 +15,6 @@ router.post('/users/:id/reject', rejectUser);
 router.get('/pending-listings', getPendingListings);
 router.get('/all-listings', getAllListings); // New route
 router.post('/listings/:id/approve', approveListing);
-// router.post('/listings/:id/reject', rejectListing); 
+router.post('/listings/:id/reject', rejectListing);
 
 module.exports = router;

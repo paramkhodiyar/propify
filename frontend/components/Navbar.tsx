@@ -354,11 +354,11 @@ export function Navbar() {
                 Contact
               </Link>
               <Link
-                href="/maya-ai"
+                href="/valora-ai"
                 className="block px-3 py-2 text-amber-600 font-semibold hover:text-amber-700 transition-colors animate-pulse"
                 onClick={() => setIsMenuOpen(false)}
               >
-                MayaAI
+                Valora AI
               </Link>
               {user ? (
                 <div className="space-y-1">

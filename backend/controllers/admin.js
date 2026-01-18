@@ -58,22 +58,13 @@ const approveListing = async (req, res) => {
 const rejectListing = async (req, res) => {
     const id = parseInt(req.params.id);
     try {
-        await prisma.listing.update({ // Or delete? Usually just mark rejected or keep pending?
-            // User said "admin handles approval", implies rejection is possible.
-            // I'll just delete it for rejection or add a REJECTED status. 
-            // Existing schema has SOLD, PENDING, ACTIVE. 
-            // Deleting seems safest for "Rejection" if no REJECTED status exists.
-            where: { id },
-            data: { status: 'PENDING' } // Actually, let's keep it PENDING or maybe strictly DELETE? 
-            // Let's just not change status for "Reject" but maybe we need a way to tell user?
-            // For now, I'll assume "Approve" is the main action. 
-            // Let's implement Delete as Reject.
+        await prisma.listing.delete({
+            where: { id }
         });
-        // await prisma.listing.delete({ where: { id } });
-        res.status(200).json({ message: 'Listing rejected (not implemented fully, strictly approval focused)' });
+        res.status(200).json({ message: 'Listing rejected and removed' });
     } catch (err) {
         console.log(err);
-        res.status(500).json({ message: 'Failed actions' });
+        res.status(500).json({ message: 'Failed to reject listing!' });
     }
 }
 

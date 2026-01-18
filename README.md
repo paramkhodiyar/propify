@@ -1,6 +1,6 @@
 # Propify
 
-**Propify** is a full-stack real estate platform built with a modern RBAC (Role-Based Access Control) system. It supports property listings, agent onboarding workflows, admin moderation, user inquiries, and integrates an upcoming AI-powered price prediction system called **MayaAI**.
+**Propify** is a full-stack real estate platform built with a modern RBAC (Role-Based Access Control) system. It supports property listings, agent onboarding workflows, admin moderation, user inquiries, and integrates an upcoming AI-powered price prediction system called **ValoraAI**.
 
 The platform is designed with a scalable backend architecture, multi-role dashboards, and a moderation-driven listing and user upgrade workflow.
 
@@ -16,7 +16,7 @@ The platform is designed with a scalable backend architecture, multi-role dashbo
 - Inquiry / Chat System between users and agents
 - Admin Moderation Dashboard
 - Notification System
-- Planned AI Price Prediction System (MayaAI)
+- Planned AI Price Prediction System (ValoraAI)
 
 ---
 
@@ -54,7 +54,7 @@ The platform is designed with a scalable backend architecture, multi-role dashbo
 |--------|-----|
 | Frontend (Next.js) |  |
 | Backend API |  |
-| MayaAI (ML API) |  |
+| ValoraAI (ML API) |  |
 
 ---
 
@@ -136,9 +136,9 @@ The platform is designed with a scalable backend architecture, multi-role dashbo
 
 ---
 
-## MayaAI — AI Price Prediction System (Planned)
+## ValoraAI — AI Price Prediction System (Planned)
 
-MayaAI is an upcoming AI-powered microservice that will:
+ValoraAI is an upcoming AI-powered microservice that will:
 
 - Predict approximate property prices based on:
   - Location

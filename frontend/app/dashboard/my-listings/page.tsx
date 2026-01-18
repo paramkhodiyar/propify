@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
 import { Property } from '@/types/property';
 import { Edit, Trash2, Eye, MapPin, Calendar, Plus } from 'lucide-react';
 import Link from 'next/link';

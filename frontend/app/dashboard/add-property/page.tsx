@@ -6,6 +6,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ArrowLeft, Upload, X, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
+import api from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProperties } from '@/contexts/PropertyContext';
 import { toast } from 'react-hot-toast';
@@ -33,7 +34,6 @@ export default function AddPropertyPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Check authentication and role
     if (!loading) {
       if (!user || (user.role !== 'admin' && user.role !== 'agent')) {
         router.push('/login');
@@ -52,19 +52,9 @@ export default function AddPropertyPage() {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
-
-    // Limit to 10 images
     const limitedFiles = files.slice(0, 10);
     setSelectedImages(prev => [...prev, ...limitedFiles].slice(0, 10));
-
-    // Create preview URLs
-    limitedFiles.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreviewUrls(prev => [...prev, e.target?.result as string].slice(0, 10));
-      };
-      reader.readAsDataURL(file);
-    });
+    setImagePreviewUrls(prev => [...prev, ...limitedFiles.map(file => URL.createObjectURL(file))].slice(0, 10));
   };
 
   const removeImage = (index: number) => {
@@ -102,28 +92,22 @@ export default function AddPropertyPage() {
     });
   };
 
-  // Function to compress and resize images
-  const compressImage = (file: File, maxWidth: number = 800, quality: number = 0.7): Promise<string> => {
-    return new Promise((resolve) => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d')!;
-      const img = new Image();
-
-      img.onload = () => {
-        // Calculate new dimensions
-        const ratio = Math.min(maxWidth / img.width, maxWidth / img.height);
-        canvas.width = img.width * ratio;
-        canvas.height = img.height * ratio;
-
-        // Draw and compress
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-        resolve(compressedDataUrl);
-      };
-
-      img.src = URL.createObjectURL(file);
+  const uploadImagesToCloudinary = async (files: File[]) => {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("images", file);
     });
+    const res = await api.post("/upload/images", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (!res.data.success) throw new Error("Image upload failed");
+
+    return res.data.urls as string[];
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,20 +125,11 @@ export default function AddPropertyPage() {
       let finalImages: string[] = [];
 
       if (selectedImages.length > 0) {
-        // Compress uploaded images to reduce storage size
-        const compressedImages = await Promise.all(
-          selectedImages.map(file => compressImage(file, 600, 0.6))
-        );
-        finalImages = compressedImages;
-      } else {
-        // Use stock images if no images uploaded
-        const stockImages = [
-          'https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg',
-          'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg',
-          'https://images.pexels.com/photos/2635038/pexels-photo-2635038.jpeg'
-        ];
-        finalImages = stockImages;
+        toast.loading("Uploading images...");
+        finalImages = await uploadImagesToCloudinary(selectedImages);
+        toast.dismiss();
       }
+
 
       const propertyData = {
         title: formData.title,

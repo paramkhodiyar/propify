@@ -27,9 +27,9 @@ const listingRoutes = require('./routes/listings');
 const userRoutes = require('./routes/users');
 const inquiryRoutes = require('./routes/inquiries');
 const contactRoute = require('./routes/contact');
-const listingRoute = require('./routes/listings');
 const adminRoute = require('./routes/admin');
-const dashboardRoute = require('./routes/dashboard');
+// const uploadTestRoute = require('./routes/uploadTest');
+const uploadRoute = require('./routes/upload');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -38,7 +38,8 @@ app.use('/api/admin', adminRoute);
 // app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/contact', contactRoute);
-
+// app.use("/api/test", uploadTestRoute);
+app.use("/api/upload", uploadRoute);
 // Error Handling Middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);

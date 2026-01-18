@@ -250,8 +250,8 @@ export function Navbar() {
             <Link href="/contact" className="text-gray-700 hover:text-amber-600 transition-colors">
               Contact
             </Link>
-            <Link href="/maya-ai" className="text-amber-600 font-semibold hover:text-amber-700 transition-colors animate-pulse">
-              MayaAI
+            <Link href="/valora-ai" className="text-amber-600 font-semibold hover:text-amber-700 transition-colors animate-pulse">
+              ValoraAI
             </Link>
             {user ? (
               <div className="relative group">

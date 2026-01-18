@@ -2,139 +2,195 @@ const prisma = require('../lib/prisma');
 
 const getListings = async (req, res) => {
     const q = req.query;
+
     const filters = {
-        status: "ACTIVE", // Only show active listings by default
+        status: "ACTIVE",
         ...(q.location && { location: { contains: q.location, mode: "insensitive" } }),
-        ...(q.minPrice && { price: { gte: parseInt(q.minPrice) } }),
-        ...(q.maxPrice && { price: { lte: parseInt(q.maxPrice) } }),
+        ...(q.minPrice && { price: { gte: Number(q.minPrice) } }),
+        ...(q.maxPrice && { price: { lte: Number(q.maxPrice) } }),
         ...(q.type && { type: q.type }),
-        ...(q.city && { location: { contains: q.city, mode: "insensitive" } }),
-        ...(q.property && { propertyType: q.property }), // Fixed propertyType field mapping
-        ...(q.bedroom && { bedrooms: { gte: parseInt(q.bedroom) } }),
+        ...(q.propertyType && { propertyType: q.propertyType }),
+        ...(q.bedrooms && { bedrooms: { gte: Number(q.bedrooms) } }),
     };
 
     try {
         const listings = await prisma.listing.findMany({
             where: filters,
+            orderBy: { createdAt: "desc" },
         });
-        res.status(200).json(listings);
+
+        res.json(listings);
     } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: 'Failed to get listings!' });
+        console.error(err);
+        res.status(500).json({ message: "Failed to get listings" });
     }
 };
 
 const getListing = async (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = Number(req.params.id);
+
     try {
         const listing = await prisma.listing.findUnique({
             where: { id },
             include: {
                 user: {
-                    select: {
-                        name: true,
-                        avatar: true,
-                        email: true,
-                        phone: true
-                    },
+                    select: { name: true, avatar: true, email: true, phone: true },
                 },
             },
         });
 
-        // Increment view count
-        if (listing) {
-            await prisma.listing.update({
-                where: { id },
-                data: { views: { increment: 1 } }
-            });
-        }
+        if (!listing) return res.status(404).json({ message: "Listing not found" });
 
-        res.status(200).json(listing);
+        await prisma.listing.update({
+            where: { id },
+            data: { views: { increment: 1 } },
+        });
+
+        res.json(listing);
     } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: 'Failed to get listing!' });
+        console.error(err);
+        res.status(500).json({ message: "Failed to get listing" });
     }
 };
 
 const addListing = async (req, res) => {
-    const body = req.body;
-    const tokenUserId = req.userId;
+    const userId = req.userId;
+
+    const {
+        title,
+        description,
+        price,
+        location,
+        type,
+        propertyType,
+        bedrooms,
+        bathrooms,
+        area,
+        amenities,
+        images,
+        tags,
+    } = req.body;
+
+    if (!title || !price || !location || !type || !propertyType || !images?.length) {
+        return res.status(400).json({ message: "Missing required fields" });
+    }
 
     try {
         const newListing = await prisma.listing.create({
             data: {
-                ...body,
-                status: 'PENDING', // Force pending status
-                userId: tokenUserId,
+                title,
+                description,
+                price: Number(price),
+                location,
+                type,
+                propertyType,
+                bedrooms: Number(bedrooms),
+                bathrooms: Number(bathrooms),
+                area: Number(area),
+                amenities: amenities || [],
+                images,
+                tags: tags || [],
+                status: "PENDING",
+                userId,
             },
         });
-        res.status(200).json(newListing);
+
+        res.status(201).json(newListing);
     } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: 'Failed to create listing!' });
+        console.error(err);
+        res.status(500).json({ message: "Failed to create listing" });
     }
 };
 
 const updateListing = async (req, res) => {
-    const id = parseInt(req.params.id);
-    const tokenUserId = req.userId;
-    const body = req.body;
+    const id = Number(req.params.id);
+    const userId = req.userId;
 
     try {
         const listing = await prisma.listing.findUnique({ where: { id } });
 
-        if (!listing) return res.status(404).json({ message: "Listing not found" });
+        if (!listing) return res.status(404).json({ message: "Not found" });
 
-        if (listing.userId !== tokenUserId && req.user.role !== 'ADMIN') {
-            return res.status(403).json({ message: 'Not Authorized!' });
+        if (listing.userId !== userId && req.user.role !== "ADMIN") {
+            return res.status(403).json({ message: "Not authorized" });
         }
 
-        const updatedListing = await prisma.listing.update({
+        const allowedFields = [
+            "title",
+            "description",
+            "price",
+            "location",
+            "type",
+            "propertyType",
+            "bedrooms",
+            "bathrooms",
+            "area",
+            "amenities",
+            "images",
+            "tags",
+            "status",
+        ];
+
+        const data = {};
+        for (const key of allowedFields) {
+            if (req.body[key] !== undefined) data[key] = req.body[key];
+        }
+
+        const updated = await prisma.listing.update({
             where: { id },
-            data: body,
+            data,
         });
-        res.status(200).json(updatedListing);
+
+        res.json(updated);
     } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: 'Failed to update listing!' });
+        console.error(err);
+        res.status(500).json({ message: "Failed to update listing" });
     }
 };
 
 const deleteListing = async (req, res) => {
-    const id = parseInt(req.params.id);
-    const tokenUserId = req.userId;
+    const id = Number(req.params.id);
+    const userId = req.userId;
 
     try {
         const listing = await prisma.listing.findUnique({ where: { id } });
 
-        if (!listing) return res.status(404).json({ message: "Listing not found" });
+        if (!listing) return res.status(404).json({ message: "Not found" });
 
-        if (listing.userId !== tokenUserId && req.user.role !== 'ADMIN') {
-            return res.status(403).json({ message: 'Not Authorized!' });
+        if (listing.userId !== userId && req.user.role !== "ADMIN") {
+            return res.status(403).json({ message: "Not authorized" });
         }
 
-        await prisma.listing.delete({
-            where: { id },
-        });
-        res.status(200).json({ message: 'Listing deleted' });
+        await prisma.listing.delete({ where: { id } });
+
+        res.json({ message: "Listing deleted" });
     } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: 'Failed to delete listing!' });
+        console.error(err);
+        res.status(500).json({ message: "Failed to delete listing" });
     }
 };
 
 const getMyListings = async (req, res) => {
-    const tokenUserId = req.userId;
+    const userId = req.userId;
+
     try {
         const listings = await prisma.listing.findMany({
-            where: { userId: tokenUserId },
-            orderBy: { createdAt: 'desc' }
+            where: { userId },
+            orderBy: { createdAt: "desc" },
         });
-        res.status(200).json(listings);
+
+        res.json(listings);
     } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: 'Failed to get my listings!' });
+        console.error(err);
+        res.status(500).json({ message: "Failed to get your listings" });
     }
 };
 
-module.exports = { getListings, getListing, addListing, updateListing, deleteListing, getMyListings };
+module.exports = {
+    getListings,
+    getListing,
+    addListing,
+    updateListing,
+    deleteListing,
+    getMyListings,
+};

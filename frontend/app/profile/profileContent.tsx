@@ -7,13 +7,14 @@ import Loading from '@/components/loader';
 import DashboardLayout from '@/app/dashboard/layout';
 import { User, Shield, BadgeCheck, Loader2 } from 'lucide-react';
 import api from '@/lib/api';
-import { useSearchParams, useRouter, redirect } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function ProfileContent() {
     const { user, loading } = useAuth();
     const searchParams = useSearchParams();
     const router = useRouter();
 
+    const [uploadingAvatar, setUploadingAvatar] = useState(false);
     const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'details');
     const [aadhar, setAadhar] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,16 +25,70 @@ export default function ProfileContent() {
             setActiveTab(searchParams.get('tab') as string);
         }
     }, [searchParams]);
+    useEffect(() => {
+        if (!loading && !user) {
+            toast.error("Please login to access your profile");
+            router.push("/login");
+        }
+    }, [loading, user, router]);
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <Loading />
+            </div>
+        );
+    }
 
-    if (loading) return (
-        <div className="flex items-center justify-center h-screen">
-            <Loading />
-        </div>
-    );
-    if (!user) return (
-        toast.error("Please login to access your profile"),
-        redirect("/login")
-    );
+    if (!user) {
+        return null;
+    }
+
+
+
+    const uploadAvatarToCloudinary = async (file: File) => {
+        const formData = new FormData();
+        formData.append("avatar", file);
+
+        const res = await api.post("/upload/avatar", formData);
+
+        if (!res.data.success) throw new Error("Upload failed");
+
+        return res.data.url as string;
+    };
+    const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+            toast.error("Please upload an image file");
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error("Image must be less than 5MB");
+            return;
+        }
+
+        try {
+            setUploadingAvatar(true);
+            toast.loading("Uploading avatar...");
+
+            const avatarUrl = await uploadAvatarToCloudinary(file);
+            await api.put("/users/avatar", { avatar: avatarUrl });
+
+            toast.dismiss();
+            toast.success("Profile photo updated!");
+            router.refresh();
+
+        } catch (err) {
+            toast.dismiss();
+            toast.error("Failed to upload avatar");
+        } finally {
+            setUploadingAvatar(false);
+        }
+    };
+
+
 
     const handleUpgradeRequest = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -81,13 +136,35 @@ export default function ProfileContent() {
                 {activeTab === 'details' && (
                     <div className="space-y-6 max-w-xl">
                         <div className="flex items-center space-x-4 mb-6">
-                            <div className="h-20 w-20 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-2xl font-bold">
-                                {user.avatar
-                                    ? <img src={user.avatar} className="h-full w-full rounded-full object-cover" />
-                                    : (user.name || 'U').charAt(0).toUpperCase()
-                                }
+                            <label className="relative h-20 w-20 rounded-full cursor-pointer group overflow-hidden border-2 border-amber-200 hover:border-amber-400 transition">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleAvatarChange}
+                                    disabled={uploadingAvatar}
+                                />
 
-                            </div>
+                                {user.avatar ? (
+                                    <img
+                                        src={user.avatar}
+                                        className="h-full w-full object-cover"
+                                        alt="Avatar"
+                                    />
+                                ) : (
+                                    <div className="h-full w-full bg-amber-100 flex items-center justify-center text-amber-600 text-2xl font-bold">
+                                        {(user.name || 'U').charAt(0).toUpperCase()}
+                                    </div>
+                                )}
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-medium transition">
+                                    {uploadingAvatar ? "Uploading..." : "Change"}
+                                </div>
+                                {uploadingAvatar && (
+                                    <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+                                        <Loader2 className="w-6 h-6 animate-spin text-amber-600" />
+                                    </div>
+                                )}
+                            </label>
                             <div>
                                 <h3 className="font-semibold text-lg text-gray-900">{user.name}</h3>
                                 <p className="text-gray-500">{user.email}</p>

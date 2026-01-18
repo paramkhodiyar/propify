@@ -115,6 +115,23 @@ const updateListing = async (req, res) => {
             return res.status(403).json({ message: "Not authorized" });
         }
 
+        let newStatus = listing.status;
+
+        // Re-application logic for Rejected listings
+        if (listing.status === 'REJECTED') {
+            const lastUpdated = new Date(listing.updatedAt);
+            const now = new Date();
+            const diffHours = (now - lastUpdated) / (1000 * 60 * 60);
+
+            if (diffHours < 24) {
+                const remaining = Math.ceil(24 - diffHours);
+                return res.status(403).json({
+                    message: `Application rejected. You can re-apply in ${remaining} hours.`
+                });
+            }
+            newStatus = 'PENDING'; // Auto re-apply
+        }
+
         const allowedFields = [
             "title",
             "description",
@@ -136,12 +153,17 @@ const updateListing = async (req, res) => {
             if (req.body[key] !== undefined) data[key] = req.body[key];
         }
 
+        // Force status change if re-applying
+        if (listing.status === 'REJECTED' && newStatus === 'PENDING') {
+            data.status = 'PENDING';
+        }
+
         const updated = await prisma.listing.update({
             where: { id },
             data,
         });
 
-        res.json(updated);
+        res.json({ message: "Listing updated successfully", listing: updated });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Failed to update listing" });

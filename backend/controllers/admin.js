@@ -58,10 +58,11 @@ const approveListing = async (req, res) => {
 const rejectListing = async (req, res) => {
     const id = parseInt(req.params.id);
     try {
-        await prisma.listing.delete({
-            where: { id }
+        await prisma.listing.update({
+            where: { id },
+            data: { status: 'REJECTED' }
         });
-        res.status(200).json({ message: 'Listing rejected and removed' });
+        res.status(200).json({ message: 'Listing rejected' });
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: 'Failed to reject listing!' });

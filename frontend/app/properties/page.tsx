@@ -11,6 +11,7 @@ import { useProperties } from '@/contexts/PropertyContext';
 import api from '@/lib/api';
 import { toast } from 'react-hot-toast';
 import { useAuth } from "@/contexts/AuthContext";
+import Link from 'next/link';
 
 export default function PropertiesPage() {
   const { user } = useAuth();
@@ -383,10 +384,10 @@ ${enquiryForm.message}
               </div>
 
               {/* Content */}
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              < div className="p-6">
+                <Link href={`/property/${property.id}`} className="text-xl font-semibold text-gray-900 mb-2">
                   {property.title}
-                </h3>
+                </Link>
 
                 <div className="flex items-center text-gray-600 mb-3">
                   <MapPin className="w-4 h-4 mr-1" />
@@ -438,182 +439,184 @@ ${enquiryForm.message}
       </div>
 
       {/* Quick View Modal */}
-      {showQuickView && selectedProperty && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b">
-              <h2 className="text-2xl font-bold text-gray-900">{selectedProperty.title}</h2>
-              <button
-                onClick={closeQuickView}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
-              {/* Left Column - Images and Details */}
-              <div className="space-y-6">
-                {/* Image Gallery */}
-                <div className="relative">
-                  <img
-                    src={selectedProperty.images[currentImageIndex]}
-                    alt={selectedProperty.title}
-                    className="w-full h-64 object-cover rounded-lg"
-                  />
-                  {selectedProperty.images.length > 1 && (
-                    <>
-                      <button
-                        onClick={prevImage}
-                        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg"
-                      >
-                        ←
-                      </button>
-                      <button
-                        onClick={nextImage}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg"
-                      >
-                        →
-                      </button>
-                    </>
-                  )}
-                  <div className="absolute top-4 right-4 z-10">
-                    <SavedListingButton
-                      listingId={parseInt(selectedProperty.id)}
-                      iconSize={24}
-                      className="bg-white/90 p-3 hover:bg-white shadow-lg rounded-full"
-                    />
-
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div className="flex items-center text-gray-600">
-                    <MapPin className="w-5 h-5 mr-2" />
-                    <span>{selectedProperty.location}</span>
-                  </div>
-
-                  <div className="text-3xl font-bold text-amber-600">
-                    {formatPrice(selectedProperty.price)}
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                      <Bed className="w-5 h-5 mx-auto mb-1 text-gray-600" />
-                      <span className="text-sm font-medium">{selectedProperty.bedrooms} Beds</span>
-                    </div>
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                      <Bath className="w-5 h-5 mx-auto mb-1 text-gray-600" />
-                      <span className="text-sm font-medium">{selectedProperty.bathrooms} Baths</span>
-                    </div>
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                      <Square className="w-5 h-5 mx-auto mb-1 text-gray-600" />
-                      <span className="text-sm font-medium">{selectedProperty.area} sq ft</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Description</h4>
-                    <p className="text-gray-700 text-sm leading-relaxed">{selectedProperty.description}</p>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Amenities</h4>
-                    <div className="grid grid-cols-2 gap-1">
-                      {selectedProperty.amenities.slice(0, 6).map((amenity, index) => (
-                        <div key={index} className="flex items-center text-sm text-gray-700">
-                          <div className="w-2 h-2 bg-amber-600 rounded-full mr-2"></div>
-                          {amenity}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+      {
+        showQuickView && selectedProperty && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between p-6 border-b">
+                <h2 className="text-2xl font-bold text-gray-900">{selectedProperty.title}</h2>
+                <button
+                  onClick={closeQuickView}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
               </div>
 
-              {/* Right Column - Enquiry Form */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Quick Enquiry</h3>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+                {/* Left Column - Images and Details */}
+                <div className="space-y-6">
+                  {/* Image Gallery */}
+                  <div className="relative">
+                    <img
+                      src={selectedProperty.images[currentImageIndex]}
+                      alt={selectedProperty.title}
+                      className="w-full h-64 object-cover rounded-lg"
+                    />
+                    {selectedProperty.images.length > 1 && (
+                      <>
+                        <button
+                          onClick={prevImage}
+                          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg"
+                        >
+                          ←
+                        </button>
+                        <button
+                          onClick={nextImage}
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg"
+                        >
+                          →
+                        </button>
+                      </>
+                    )}
+                    <div className="absolute top-4 right-4 z-10">
+                      <SavedListingButton
+                        listingId={parseInt(selectedProperty.id)}
+                        iconSize={24}
+                        className="bg-white/90 p-3 hover:bg-white shadow-lg rounded-full"
+                      />
 
-                {isEnquirySubmitted ? (
-                  <div className="text-center py-8">
-                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
                     </div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Enquiry Sent!</h4>
-                    <p className="text-gray-600">We'll get back to you within 24 hours.</p>
                   </div>
-                ) : (
-                  <form onSubmit={handleEnquirySubmit} className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={enquiryForm.name}
-                        onChange={handleEnquiryChange}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                        placeholder="Enter your name"
-                      />
+                  <div className="space-y-4">
+                    <div className="flex items-center text-gray-600">
+                      <MapPin className="w-5 h-5 mr-2" />
+                      <span>{selectedProperty.location}</span>
+                    </div>
+
+                    <div className="text-3xl font-bold text-amber-600">
+                      {formatPrice(selectedProperty.price)}
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4 text-center">
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <Bed className="w-5 h-5 mx-auto mb-1 text-gray-600" />
+                        <span className="text-sm font-medium">{selectedProperty.bedrooms} Beds</span>
+                      </div>
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <Bath className="w-5 h-5 mx-auto mb-1 text-gray-600" />
+                        <span className="text-sm font-medium">{selectedProperty.bathrooms} Baths</span>
+                      </div>
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <Square className="w-5 h-5 mx-auto mb-1 text-gray-600" />
+                        <span className="text-sm font-medium">{selectedProperty.area} sq ft</span>
+                      </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={enquiryForm.email}
-                        onChange={handleEnquiryChange}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                        placeholder="Enter your email"
-                      />
+                      <h4 className="font-semibold text-gray-900 mb-2">Description</h4>
+                      <p className="text-gray-700 text-sm leading-relaxed">{selectedProperty.description}</p>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={enquiryForm.phone}
-                        onChange={handleEnquiryChange}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                        placeholder="Enter your phone number"
-                      />
+                      <h4 className="font-semibold text-gray-900 mb-2">Amenities</h4>
+                      <div className="grid grid-cols-2 gap-1">
+                        {selectedProperty.amenities.slice(0, 6).map((amenity, index) => (
+                          <div key={index} className="flex items-center text-sm text-gray-700">
+                            <div className="w-2 h-2 bg-amber-600 rounded-full mr-2"></div>
+                            {amenity}
+                          </div>
+                        ))}
+                      </div>
                     </div>
+                  </div>
+                </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                      <textarea
-                        name="message"
-                        value={enquiryForm.message}
-                        onChange={handleEnquiryChange}
-                        rows={4}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
-                        placeholder="Tell us about your requirements..."
-                      />
+                {/* Right Column - Enquiry Form */}
+                <div className="bg-gray-50 p-6 rounded-lg">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Quick Enquiry</h3>
+
+                  {isEnquirySubmitted ? (
+                    <div className="text-center py-8">
+                      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">Enquiry Sent!</h4>
+                      <p className="text-gray-600">We'll get back to you within 24 hours.</p>
                     </div>
+                  ) : (
+                    <form onSubmit={handleEnquirySubmit} className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={enquiryForm.name}
+                          onChange={handleEnquiryChange}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                          placeholder="Enter your name"
+                        />
+                      </div>
 
-                    <button
-                      type="submit"
-                      className="w-full bg-amber-600 text-white py-3 px-4 rounded-lg hover:bg-amber-700 transition-colors font-medium flex items-center justify-center space-x-2"
-                    >
-                      <Send className="w-4 h-4" />
-                      <span>Send Enquiry</span>
-                    </button>
-                  </form>
-                )}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={enquiryForm.email}
+                          onChange={handleEnquiryChange}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                          placeholder="Enter your email"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={enquiryForm.phone}
+                          onChange={handleEnquiryChange}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                          placeholder="Enter your phone number"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                        <textarea
+                          name="message"
+                          value={enquiryForm.message}
+                          onChange={handleEnquiryChange}
+                          rows={4}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
+                          placeholder="Tell us about your requirements..."
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="w-full bg-amber-600 text-white py-3 px-4 rounded-lg hover:bg-amber-700 transition-colors font-medium flex items-center justify-center space-x-2"
+                      >
+                        <Send className="w-4 h-4" />
+                        <span>Send Enquiry</span>
+                      </button>
+                    </form>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
       <Footer />
 
-    </div>
+    </div >
   );
 }

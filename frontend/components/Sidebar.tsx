@@ -11,7 +11,8 @@ import {
     LogOut,
     ShieldCheck,
     FileText,
-    BadgeCheck
+    BadgeCheck,
+    SquarePen
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -29,6 +30,7 @@ export default function Sidebar() {
 
     const agentLinks = [
         { href: '/dashboard/my-listings', label: 'My Listings', icon: Building2 },
+        { href: '/dashboard/edit-property', label: 'Edit Property', icon: SquarePen },
     ];
 
     const userLinks = [

@@ -33,6 +33,7 @@ enum ListingStatus {
   ACTIVE
   SOLD
   PENDING
+  REJECTED
 }
 
 model User {

@@ -8,10 +8,6 @@ async function main() {
 
     const hashedPassword = await bcrypt.hash("password123", 10);
 
-    // ------------------------
-    // Create Users
-    // ------------------------
-
     const admin = await prisma.user.upsert({
         where: { email: "admin@gmail.com" },
         update: {},
@@ -21,6 +17,7 @@ async function main() {
             password: hashedPassword,
             role: "ADMIN",
             bio: "System Administrator",
+            isVerified: true
         },
     });
 
@@ -34,7 +31,8 @@ async function main() {
             role: "AGENT",
             bio: "Senior Agent - North & Central India",
             phone: "+919876543210",
-            avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+
+            isVerified: true
         },
     });
 
@@ -48,7 +46,7 @@ async function main() {
             role: "AGENT",
             bio: "Senior Agent - West & South India",
             phone: "+919812345678",
-            avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+            isVerified: true
         },
     });
 
@@ -78,20 +76,11 @@ async function main() {
 
     console.log("✅ Users created");
 
-    // ------------------------
-    // Clear old listings (optional but recommended for dev)
-    // ------------------------
-
     await prisma.inquiry.deleteMany();
     await prisma.savedListing.deleteMany();
     await prisma.listing.deleteMany();
 
-    // ------------------------
-    // Properties Across India
-    // ------------------------
-
     const properties = [
-        // North
         {
             title: "Luxury Villa in South Delhi",
             location: "South Delhi, Delhi",
@@ -114,8 +103,6 @@ async function main() {
             area: 1650,
             tags: ["family", "gated"],
         },
-
-        // West
         {
             title: "Sea View Apartment in Mumbai",
             location: "Worli, Mumbai",
@@ -138,8 +125,6 @@ async function main() {
             area: 3000,
             tags: ["penthouse", "luxury"],
         },
-
-        // South
         {
             title: "Tech Park Apartment in Bangalore",
             location: "Whitefield, Bangalore",
@@ -162,8 +147,6 @@ async function main() {
             area: 2800,
             tags: ["villa", "premium"],
         },
-
-        // Central / East
         {
             title: "Family Home in Raipur",
             location: "Raipur, Chhattisgarh",
@@ -200,7 +183,6 @@ async function main() {
 
     for (let i = 0; i < properties.length; i++) {
         const prop = properties[i];
-
         const assignedAgent = i % 2 === 0 ? agent1 : agent2;
 
         const listing = await prisma.listing.create({
@@ -210,7 +192,7 @@ async function main() {
                 price: prop.price,
                 location: prop.location,
                 type: prop.type,
-                propertyType: prop.propertyType, // Schema does not support this yet
+                propertyType: prop.propertyType,
                 bedrooms: prop.bedrooms,
                 bathrooms: prop.bathrooms,
                 area: prop.area,
@@ -227,10 +209,6 @@ async function main() {
 
     console.log("✅ Listings created");
 
-    // ------------------------
-    // Saved Listings
-    // ------------------------
-
     await prisma.savedListing.create({
         data: {
             userId: user1.id,
@@ -244,10 +222,6 @@ async function main() {
             listingId: createdListings[1].id,
         },
     });
-
-    // ------------------------
-    // Inquiries
-    // ------------------------
 
     await prisma.inquiry.create({
         data: {
@@ -266,7 +240,6 @@ async function main() {
     });
 
     console.log("✅ Saved listings & inquiries created");
-
     console.log("🌱 Seeding completed successfully!");
 }
 

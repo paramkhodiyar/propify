@@ -1,9 +1,35 @@
 const prisma = require('../lib/prisma');
 const bcrypt = require('bcrypt');
 
+
+const getTokenUser = async (userId) => {
+    if (!userId) return null;
+    return prisma.user.findUnique({
+        where: { id: userId }
+    });
+};
+
+
 const getUsers = async (req, res) => {
     try {
-        const users = await prisma.user.findMany();
+        const tokenUser = await getTokenUser(req.userId);
+
+        if (!tokenUser || tokenUser.role !== 'ADMIN') {
+            return res.status(403).json({ message: "Admin only" });
+        }
+
+        const users = await prisma.user.findMany({
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                avatar: true,
+                createdAt: true,
+                upgradeRequested: true
+            }
+        });
+
         res.status(200).json(users);
     } catch (err) {
         console.log(err);
@@ -13,6 +39,7 @@ const getUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
     const id = parseInt(req.params.id);
+
     try {
         const user = await prisma.user.findUnique({
             where: { id },
@@ -34,17 +61,47 @@ const getUser = async (req, res) => {
     }
 };
 
+
+const changeProfileAvatar = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { avatar } = req.body;
+
+        if (!avatar) {
+            return res.status(400).json({ message: "Avatar URL required" });
+        }
+
+        const updated = await prisma.user.update({
+            where: { id: userId },
+            data: { avatar }
+        });
+
+        res.json({ success: true, avatar: updated.avatar });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Failed to update avatar" });
+    }
+};
+
+
 const updateUser = async (req, res) => {
     const id = parseInt(req.params.id);
     const tokenUserId = req.userId;
-    const { password, avatar, ...inputs } = req.body;
 
-    if (id !== tokenUserId && req.user.role !== 'ADMIN') {
-        return res.status(403).json({ message: 'Not Authorized!' });
-    }
-
-    let updatedPassword = null;
     try {
+        const tokenUser = await getTokenUser(tokenUserId);
+
+        if (!tokenUser) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        if (id !== tokenUserId && tokenUser.role !== 'ADMIN') {
+            return res.status(403).json({ message: "Not Authorized!" });
+        }
+
+        const { password, avatar, ...inputs } = req.body;
+
+        let updatedPassword = null;
         if (password) {
             updatedPassword = await bcrypt.hash(password, 10);
         }
@@ -67,24 +124,33 @@ const updateUser = async (req, res) => {
     }
 };
 
+
 const deleteUser = async (req, res) => {
     const id = parseInt(req.params.id);
     const tokenUserId = req.userId;
 
-    if (id !== tokenUserId && req.user.role !== 'ADMIN') {
-        return res.status(403).json({ message: 'Not Authorized!' });
-    }
-
     try {
+        const tokenUser = await getTokenUser(tokenUserId);
+
+        if (!tokenUser) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        if (id !== tokenUserId && tokenUser.role !== 'ADMIN') {
+            return res.status(403).json({ message: "Not Authorized!" });
+        }
+
         await prisma.user.delete({
             where: { id },
         });
+
         res.status(200).json({ message: 'User deleted!' });
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: 'Failed to delete user!' });
     }
 };
+
 
 const saveListing = async (req, res) => {
     const listingId = parseInt(req.body.listingId);
@@ -102,9 +168,7 @@ const saveListing = async (req, res) => {
 
         if (savedListing) {
             await prisma.savedListing.delete({
-                where: {
-                    id: savedListing.id,
-                },
+                where: { id: savedListing.id },
             });
             res.status(200).json({ message: 'Listing removed from saved list' });
         } else {
@@ -122,20 +186,22 @@ const saveListing = async (req, res) => {
     }
 };
 
+
 const getProfilePosts = async (req, res) => {
     const tokenUserId = req.userId;
+
     try {
         const userPosts = await prisma.listing.findMany({
             where: { userId: tokenUserId },
         });
+
         const saved = await prisma.savedListing.findMany({
             where: { userId: tokenUserId },
-            include: {
-                listing: true,
-            },
+            include: { listing: true },
         });
 
         const savedListings = saved.map((item) => item.listing);
+
         res.status(200).json({ userPosts, savedListings });
     } catch (err) {
         console.log(err);
@@ -145,19 +211,15 @@ const getProfilePosts = async (req, res) => {
 
 const getNotificationNumber = async (req, res) => {
     const tokenUserId = req.userId;
+
     try {
         const number = await prisma.chat.count({
             where: {
-                userIDs: {
-                    hasSome: [tokenUserId],
-                },
-                NOT: {
-                    seenBy: {
-                        hasSome: [tokenUserId],
-                    },
-                },
+                userIDs: { hasSome: [tokenUserId] },
+                NOT: { seenBy: { hasSome: [tokenUserId] } },
             },
         });
+
         res.status(200).json(number);
     } catch (err) {
         console.log(err);
@@ -182,6 +244,7 @@ const requestUpgrade = async (req, res) => {
                 upgradeRequested: true
             },
         });
+
         const { password, ...rest } = updatedUser;
         res.status(200).json(rest);
     } catch (err) {
@@ -190,4 +253,14 @@ const requestUpgrade = async (req, res) => {
     }
 };
 
-module.exports = { getUsers, getUser, updateUser, deleteUser, saveListing, getProfilePosts, getNotificationNumber, requestUpgrade };
+module.exports = {
+    getUsers,
+    getUser,
+    updateUser,
+    deleteUser,
+    saveListing,
+    getProfilePosts,
+    getNotificationNumber,
+    requestUpgrade,
+    changeProfileAvatar
+};

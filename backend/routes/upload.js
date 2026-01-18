@@ -13,4 +13,14 @@ router.post("/images", upload.array("images", 10), (req, res) => {
     }
 });
 
+router.post("/avatar", upload.single("avatar"), (req, res) => {
+    try {
+        const url = req.file.path;
+        res.json({ success: true, url });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "Avatar upload failed" });
+    }
+});
+
 module.exports = router;

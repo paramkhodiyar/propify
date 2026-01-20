@@ -326,8 +326,6 @@ export default function AddPropertyPage() {
               />
             </div>
           </div>
-
-          {/* Property Details */}
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Property Details</h2>
 
@@ -384,13 +382,10 @@ export default function AddPropertyPage() {
               </div>
             </div>
           </div>
-
-          {/* Property Images */}
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Property Images</h2>
 
             <div className="space-y-4">
-              {/* Upload Area */}
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-amber-400 transition-colors">
                 <input
                   type="file"
@@ -435,8 +430,6 @@ export default function AddPropertyPage() {
               )}
             </div>
           </div>
-
-          {/* Amenities */}
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Amenities</h2>
 
@@ -454,8 +447,6 @@ export default function AddPropertyPage() {
               ))}
             </div>
           </div>
-
-          {/* Tags */}
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Status Tags</h2>
 

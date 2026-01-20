@@ -211,8 +211,6 @@ ${enquiryForm.message}
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-
-      {/* Hero Section */}
       <section className="bg-gradient-to-r from-amber-50 to-orange-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Browse All Properties</h1>
@@ -223,7 +221,6 @@ ${enquiryForm.message}
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search and Filter Section */}
         <div className="bg-white p-6 rounded-xl shadow-lg mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-semibold text-gray-900 flex items-center">
@@ -239,7 +236,6 @@ ${enquiryForm.message}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Location Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
               <select
@@ -254,7 +250,6 @@ ${enquiryForm.message}
               </select>
             </div>
 
-            {/* Property Type Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Property Type</label>
               <select
@@ -269,7 +264,6 @@ ${enquiryForm.message}
               </select>
             </div>
 
-            {/* Min Price Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Min Price (INR)</label>
               <input
@@ -281,7 +275,6 @@ ${enquiryForm.message}
               />
             </div>
 
-            {/* Max Price Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Max Price (INR)</label>
               <input
@@ -293,7 +286,6 @@ ${enquiryForm.message}
               />
             </div>
 
-            {/* Bedrooms Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Min Bedrooms</label>
               <select
@@ -309,7 +301,6 @@ ${enquiryForm.message}
               </select>
             </div>
 
-            {/* Bathrooms Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Min Bathrooms</label>
               <select
@@ -326,18 +317,15 @@ ${enquiryForm.message}
           </div>
         </div>
 
-        {/* Results Count */}
         <div className="mb-6">
           <p className="text-gray-600">
             Showing <span className="font-semibold text-gray-900">{filteredProperties.length}</span> properties
           </p>
         </div>
 
-        {/* Properties Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProperties.map((property) => (
             <div key={property.id} className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
-              {/* Image */}
               <div className="relative">
                 <div className="absolute top-12 right-2.5 z-10">
                   <SavedListingButton
@@ -352,7 +340,6 @@ ${enquiryForm.message}
                   alt={property.title}
                   className="w-full h-48 object-cover"
                 />
-                {/* Tags */}
                 <div className="absolute top-3 left-3 flex flex-wrap gap-2">
                   {property.tags.map((tag) => (
                     <span
@@ -363,7 +350,6 @@ ${enquiryForm.message}
                     </span>
                   ))}
                 </div>
-                {/* Quick View Button */}
                 <button
                   onClick={() => openQuickView(property)}
                   className="absolute top-3 right-3 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
@@ -371,8 +357,6 @@ ${enquiryForm.message}
                   <Eye className="w-4 h-4 text-gray-700" />
                 </button>
               </div>
-
-              {/* Content */}
               < div className="p-6">
                 <Link href={`/property/${property.id}`} className="text-xl font-semibold text-gray-900 mb-2">
                   {property.title}
@@ -426,13 +410,11 @@ ${enquiryForm.message}
           </div>
         )}
       </div>
-
-      {/* Quick View Modal */}
       {
         showQuickView && selectedProperty && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-              {/* Modal Header */}
+
               <div className="flex items-center justify-between p-6 border-b">
                 <h2 className="text-2xl font-bold text-gray-900">{selectedProperty.title}</h2>
                 <button
@@ -444,9 +426,9 @@ ${enquiryForm.message}
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
-                {/* Left Column - Images and Details */}
+
                 <div className="space-y-6">
-                  {/* Image Gallery */}
+
                   <div className="relative">
                     <img
                       src={selectedProperty.images[currentImageIndex]}
@@ -521,8 +503,6 @@ ${enquiryForm.message}
                     </div>
                   </div>
                 </div>
-
-                {/* Right Column - Enquiry Form */}
                 <div className="bg-gray-50 p-6 rounded-lg">
                   <h3 className="text-xl font-semibold text-gray-900 mb-4">Quick Enquiry</h3>
 

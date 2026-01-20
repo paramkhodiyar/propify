@@ -38,14 +38,13 @@ export const useAuth = () => {
   return context;
 };
 
-// Demo user credentials
 const DEMO_USERS = {
-  'admin@mayarealestate.com': {
+  'admin@propify.in': {
     password: 'admin123',
     role: 'admin' as UserRole,
     displayName: 'Admin User'
   },
-  'visitor@mayarealestate.com': {
+  'visitor@propify.in': {
     password: 'visitor123',
     role: 'visitor' as UserRole,
     displayName: 'Visitor User'

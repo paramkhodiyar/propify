@@ -259,7 +259,6 @@ export default function EditPropertyPage() {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-8">
-                    {/* Basic Information */}
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-xl font-semibold text-gray-900 mb-6">Basic Information</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -331,8 +330,6 @@ export default function EditPropertyPage() {
                             />
                         </div>
                     </div>
-
-                    {/* Property Details */}
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-xl font-semibold text-gray-900 mb-6">Property Details</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -374,8 +371,6 @@ export default function EditPropertyPage() {
                             </div>
                         </div>
                     </div>
-
-                    {/* Images */}
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-xl font-semibold text-gray-900 mb-6">Property Images</h2>
                         <div className="space-y-4">
@@ -412,8 +407,6 @@ export default function EditPropertyPage() {
                             )}
                         </div>
                     </div>
-
-                    {/* Amenities */}
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-xl font-semibold text-gray-900 mb-6">Amenities</h2>
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -430,8 +423,6 @@ export default function EditPropertyPage() {
                             ))}
                         </div>
                     </div>
-
-                    {/* Tags */}
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-xl font-semibold text-gray-900 mb-6">Status Tags</h2>
                         <div className="flex flex-wrap gap-3">
@@ -448,8 +439,6 @@ export default function EditPropertyPage() {
                             ))}
                         </div>
                     </div>
-
-                    {/* Actions */}
                     <div className="flex justify-end space-x-4">
                         <Link href="/dashboard/my-listings" className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
                             Cancel

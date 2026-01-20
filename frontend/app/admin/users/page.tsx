@@ -109,7 +109,7 @@ export default function AdminUsersPage() {
                                             >
                                                 <option value="USER">User</option>
                                                 <option value="AGENT">Agent</option>
-                                                {/* <option value="ADMIN">Admin</option> */}
+                                                <option value="ADMIN">Admin</option>
                                             </select>
                                             {actionLoading === user.id && <Loader2 className="w-4 h-4 animate-spin ml-2 inline" />}
                                         </td>

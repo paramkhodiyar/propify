@@ -172,15 +172,12 @@ export default function DashboardPage() {
             </p>
           </div>
         </div>
-
-        {/* Properties Table */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-xl font-semibold text-gray-900">
               {user.role === 'admin' ? 'All Properties' : 'My Listings'}
             </h2>
           </div>
-
           {properties.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-gray-400 mb-4">
@@ -299,8 +296,6 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
-
-      {/* Delete Confirmation Modal */}
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">

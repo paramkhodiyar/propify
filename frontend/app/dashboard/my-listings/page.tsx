@@ -202,7 +202,6 @@ export default function MyListingsPage() {
 
             {deleteConfirm && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    {/* Modal Content - same as Dashboard */}
                     <div className="bg-white rounded-lg p-6 max-w-md w-full">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Confirm Delete</h3>
                         <p className="text-gray-600 mb-6">Are you sure you want to delete this property?</p>

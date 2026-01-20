@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
               <h3 style="color: #92400e; margin-top: 0;">Need Immediate Assistance?</h3>
               <p style="color: #92400e; margin-bottom: 10px;">Feel free to contact us directly:</p>
               <p style="color: #92400e; margin: 5px 0;"><strong>📞 Phone:</strong> +91 9876543210</p>
-              <p style="color: #92400e; margin: 5px 0;"><strong>📧 Email:</strong> info@mayare.in</p>
+              <p style="color: #92400e; margin: 5px 0;"><strong>📧 Email:</strong> info@propify.in</p>
               <p style="color: #92400e; margin: 5px 0;"><strong>📍 Office:</strong> Raipur, Chhattisgarh</p>
             </div>
             

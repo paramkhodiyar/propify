@@ -5,7 +5,6 @@ export function Footer() {
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <Home className="w-6 h-6 text-amber-600" />
@@ -16,8 +15,6 @@ export function Footer() {
               We provide premium real estate services with integrity and excellence.
             </p>
           </div>
-
-          {/* Quick Links */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Quick Links</h3>
             <ul className="space-y-2">
@@ -27,19 +24,15 @@ export function Footer() {
               <li><a href="/properties" className="text-gray-400 hover:text-amber-600 transition-colors">Properties</a></li>
             </ul>
           </div>
-
-          {/* Services */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Services</h3>
             <ul className="space-y-2">
-              <li className="text-gray-400">Property Sales</li>
-              <li className="text-gray-400">Property Rental</li>
+              <li className="text-gray-400">Property Listing</li>
+              <li className="text-gray-400">Property Purchase</li>
               <li className="text-gray-400">Property Management</li>
-              <li className="text-gray-400">Investment Consulting</li>
+              <li className="text-gray-400">Investment/Sale Consulting</li>
             </ul>
           </div>
-
-          {/* Contact Info */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Contact Info</h3>
             <div className="space-y-3">
@@ -67,13 +60,12 @@ export function Footer() {
               <p className="mt-1">
                 This website is for development/demo purposes only and is not a real business.
                 For any queries, contact:
-                <br />
-                <a
+                <span> <a
                   href="mailto:paramkhodiyar1008@gmail.com"
                   className="font-medium underline hover:text-yellow-900"
                 >
                   paramkhodiyar1008@gmail.com
-                </a>
+                </a></span>
               </p>
             </div>
 

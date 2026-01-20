@@ -91,7 +91,6 @@ export default function Sidebar() {
                                     </Link>
                                 );
                             })}
-                            {/* Upgrade Option for Users */}
                             <Link
                                 href="/profile?tab=upgrade"
                                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive('/profile?tab=upgrade')

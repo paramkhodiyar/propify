@@ -27,7 +27,7 @@ interface FieldProps {
     children: React.ReactNode;
 }
 
-export default function MayaAIPage() {
+export default function ValoraAIPage() {
     const [form, setForm] = useState<FormData>({
         city: "gurgaon",
         location: "",

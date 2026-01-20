@@ -48,14 +48,12 @@ export function PropertyCard({ property }: PropertyCardProps) {
   return (
     <Link href={`/property/${property.id}`}>
       <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
-        {/* Image */}
         <div className="relative">
           <img
             src={property.image}
             alt={property.title}
             className="w-full h-48 object-cover"
           />
-          {/* Tags */}
           <div className="absolute top-3 left-3 flex flex-wrap gap-2">
             {property.tags.map((tag) => (
               <span
@@ -70,8 +68,6 @@ export function PropertyCard({ property }: PropertyCardProps) {
             <SavedListingButton listingId={parseInt(property.id)} />
           </div>
         </div>
-
-        {/* Content */}
         <div className="p-6">
           <h3 className="text-xl font-semibold text-gray-900 mb-2 hover:text-amber-600 transition-colors">
             {property.title}

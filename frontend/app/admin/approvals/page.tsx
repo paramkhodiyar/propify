@@ -95,8 +95,6 @@ export default function AdminApprovalsPage() {
         <DashboardLayout>
             <div className="space-y-8">
                 <h1 className="text-2xl font-bold text-gray-900">Pending Approvals</h1>
-
-                {/* Users Section */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
                         <h2 className="font-semibold text-gray-900">Seller Upgrade Requests</h2>
@@ -137,8 +135,6 @@ export default function AdminApprovalsPage() {
                         </div>
                     )}
                 </div>
-
-                {/* Listings Section */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
                         <h2 className="font-semibold text-gray-900">Property Listing Approvals</h2>

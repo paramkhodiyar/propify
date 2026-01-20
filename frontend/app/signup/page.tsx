@@ -79,7 +79,6 @@ export default function SignupPage() {
 
                     <div className="bg-white p-8 rounded-xl shadow-lg">
                         <form className="space-y-6" onSubmit={handleSubmit}>
-                            {/* Name */}
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                                     Full Name
@@ -96,7 +95,6 @@ export default function SignupPage() {
                                 />
                             </div>
 
-                            {/* Email */}
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                                     Email Address
@@ -113,7 +111,7 @@ export default function SignupPage() {
                                 />
                             </div>
 
-                            {/* Password */}
+
                             <div>
                                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                                     Password
@@ -130,7 +128,7 @@ export default function SignupPage() {
                                 />
                             </div>
 
-                            {/* Confirm Password */}
+
                             <div>
                                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                                     Confirm Password
@@ -147,7 +145,6 @@ export default function SignupPage() {
                                 />
                             </div>
 
-                            {/* Submit */}
                             <button
                                 type="submit"
                                 disabled={isLoading}
@@ -156,7 +153,7 @@ export default function SignupPage() {
                                 {isLoading ? 'Creating account...' : 'Create account'}
                             </button>
 
-                            {/* Divider */}
+
                             <div className="relative my-6">
                                 <div className="absolute inset-0 flex items-center">
                                     <div className="w-full border-t border-gray-200"></div>
@@ -166,7 +163,7 @@ export default function SignupPage() {
                                 </div>
                             </div>
 
-                            {/* Login link */}
+
                             <div className="text-center text-sm text-gray-600">
                                 <span>Already have an account? </span>
                                 <Link

@@ -130,7 +130,7 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const refreshProperties = () => {
-    const storedProperties = localStorage.getItem('maya_properties');
+    const storedProperties = localStorage.getItem('properties');
     if (storedProperties) {
       try {
         const parsed = JSON.parse(storedProperties);

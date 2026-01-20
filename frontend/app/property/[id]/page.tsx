@@ -133,7 +133,6 @@ export default function PropertyDetailPage() {
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
         <div className="mb-8">
           <div className="flex flex-wrap gap-2 mb-4">
             {property.tags.map((tag) => (
@@ -160,9 +159,7 @@ export default function PropertyDetailPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Images and Details */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Image Gallery */}
             <div className="space-y-4">
               <div className="relative">
                 <img
@@ -187,8 +184,6 @@ export default function PropertyDetailPage() {
                   </>
                 )}
               </div>
-
-              {/* Image Thumbnails */}
               {property.images.length > 1 && (
                 <div className="flex space-x-2 overflow-x-auto">
                   {property.images.map((image, index) => (
@@ -209,7 +204,6 @@ export default function PropertyDetailPage() {
               )}
             </div>
 
-            {/* Key Features */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold mb-4">Property Details</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -230,14 +224,10 @@ export default function PropertyDetailPage() {
                 </div>
               </div>
             </div>
-
-            {/* Description */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold mb-4">Description</h3>
               <p className="text-gray-700 leading-relaxed">{property.description}</p>
             </div>
-
-            {/* Amenities */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold mb-4">Amenities</h3>
               <div className="grid grid-cols-2 gap-2">
@@ -251,9 +241,8 @@ export default function PropertyDetailPage() {
             </div>
           </div>
 
-          {/* Right Column - Contact Form */}
           <div className="space-y-6">
-            {/* Contact CTA */}
+
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Interested in this property?</h3>
 
@@ -330,8 +319,6 @@ export default function PropertyDetailPage() {
                 </form>
               )}
             </div>
-
-            {/* Property Summary */}
             <div className="bg-amber-50 p-6 rounded-lg border border-amber-200">
               <h4 className="font-semibold text-amber-900 mb-3">Property Summary</h4>
               <div className="space-y-2 text-sm">

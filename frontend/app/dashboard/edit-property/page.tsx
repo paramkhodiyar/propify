@@ -333,17 +333,12 @@ export default function EditPropertyPage() {
                     )}
                 </div>
             </div>
-
-            {/* Modal Overlay */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                    {/* Backdrop */}
                     <div
                         className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
                         onClick={closeModal}
                     ></div>
-
-                    {/* Modal Content */}
                     <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
                         <div className="sticky top-0 z-10 bg-white border-b px-6 py-4 flex items-center justify-between">
                             <h2 className="text-xl font-bold text-gray-900">
@@ -369,7 +364,6 @@ export default function EditPropertyPage() {
                             )}
 
                             <form onSubmit={handleSubmit} className="space-y-8">
-                                {/* Form Content - Same as Add Property Page */}
                                 <div className="space-y-6">
                                     <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Basic Information</h3>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

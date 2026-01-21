@@ -13,7 +13,7 @@ async function main() {
         update: {},
         create: {
             email: "admin@gmail.com",
-            name: "Maya Admin",
+            name: "Admin",
             password: hashedPassword,
             role: "ADMIN",
             bio: "System Administrator",

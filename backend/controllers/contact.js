@@ -5,7 +5,7 @@ const sendContactMessage = async (req, res) => {
 
   try {
 
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@mayarealestate.in';
+    const adminEmail = process.env.ADMIN_EMAIL;
 
     const emailSubject = `New Contact Form Submission: ${subject}`;
     const text = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;

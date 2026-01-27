@@ -40,7 +40,7 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
 
   const isProd = process.env.NEXT_PUBLIC_IS_PROD === "true";
-  const URL = "http://localhost:4000"; // Using local backend port directly as verified
+  const URL = isProd ? "https://propify-g2n5.onrender.com" : "http://localhost:4000";
 
   useEffect(() => {
     startChecks();
@@ -57,7 +57,7 @@ export default function HomePage() {
 
       const start = Date.now();
       try {
-        await axios.get(`${URL}/`); // Root endpoint returns "Propify Real Estate Backend is Running"
+        await axios.get(`${URL}/`);
       } catch (e: any) {
         if (!e.response) throw e;
       }

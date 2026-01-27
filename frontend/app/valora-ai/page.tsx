@@ -11,15 +11,15 @@ interface FormData {
     city: string;
     location: string;
     property_type: string;
-    bedrooms: number;
-    bathrooms: number;
-    balconies: number;
-    area_sqft: number;
-    floor_num: number;
-    total_floor: number;
-    age: number;
-    furnish: number;
-    facing: number;
+    bedrooms: number | "";
+    bathrooms: number | "";
+    balconies: number | "";
+    area_sqft: number | "";
+    floor_num: number | "";
+    total_floor: number | "";
+    age: number | "";
+    furnish: number | "";
+    facing: number | "";
 }
 
 interface FieldProps {
@@ -61,7 +61,7 @@ export default function ValoraAIPage() {
         const { name, value } = e.target;
         setForm((prev) => ({
             ...prev,
-            [name]: ["city", "location", "property_type"].includes(name) ? value : Number(value),
+            [name]: ["city", "location", "property_type"].includes(name) ? value : (value === "" ? "" : Number(value)),
         }));
     };
 
@@ -192,29 +192,62 @@ export default function ValoraAIPage() {
                                 <FaHome /> Property Details
                             </h2>
 
-                            <Field label="City">
-                                <input name="city" value={form.city} onChange={handleChange} className="input" />
-                            </Field>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <Field label="City">
+                                    <input name="city" value={form.city} onChange={handleChange} className="input" required />
+                                </Field>
+                                <Field label="Locality">
+                                    <input name="location" value={form.location} onChange={handleChange} className="input" required />
+                                </Field>
+                            </div>
 
-                            <Field label="Locality">
-                                <input name="location" value={form.location} onChange={handleChange} className="input" />
-                            </Field>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <Field label="Property Type">
+                                    <select name="property_type" value={form.property_type} onChange={handleChange} className="input" required>
+                                        <option value="apartment">Apartment</option>
+                                        <option value="villa">Villa</option>
+                                        <option value="house">House</option>
+                                        <option value="plot">Plot</option>
+                                    </select>
+                                </Field>
+                                <Field label="Bedrooms">
+                                    <input type="number" name="bedrooms" value={form.bedrooms} onChange={handleChange} className="input" required min="0" />
+                                </Field>
+                            </div>
 
-                            <Field label="Property Type">
-                                <select name="property_type" value={form.property_type} onChange={handleChange} className="input">
-                                    <option value="apartment">Apartment</option>
-                                    <option value="villa">Villa</option>
-                                    <option value="house">House</option>
-                                    <option value="plot">Plot</option>
-                                </select>
-                            </Field>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <Field label="Bathrooms">
+                                    <input type="number" name="bathrooms" value={form.bathrooms} onChange={handleChange} className="input" required min="0" />
+                                </Field>
+                                <Field label="Balconies">
+                                    <input type="number" name="balconies" value={form.balconies} onChange={handleChange} className="input" required min="0" />
+                                </Field>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <Field label="Floor No.">
+                                    <input type="number" name="floor_num" value={form.floor_num} onChange={handleChange} className="input" required min="0" />
+                                </Field>
+                                <Field label="Total Floors">
+                                    <input type="number" name="total_floor" value={form.total_floor} onChange={handleChange} className="input" required min="0" />
+                                </Field>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <Field label="Furnish Status">
+                                    <input type="number" name="furnish" value={form.furnish} onChange={handleChange} className="input" required min="0" />
+                                </Field>
+                                <Field label="Facing">
+                                    <input type="number" name="facing" value={form.facing} onChange={handleChange} className="input" required min="0" />
+                                </Field>
+                            </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <Field label="Area (sqft)">
-                                    <input type="number" name="area_sqft" value={form.area_sqft} onChange={handleChange} className="input" />
+                                    <input type="number" name="area_sqft" value={form.area_sqft} onChange={handleChange} className="input" required min="0" />
                                 </Field>
                                 <Field label="Property Age">
-                                    <input type="number" name="age" value={form.age} onChange={handleChange} className="input" />
+                                    <input type="number" name="age" value={form.age} onChange={handleChange} className="input" required min="0" />
                                 </Field>
                             </div>
 

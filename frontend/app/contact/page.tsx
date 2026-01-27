@@ -56,8 +56,6 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-
-      {/* Hero Section */}
       <section className="bg-gradient-to-r from-amber-50 to-orange-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Contact Us</h1>
@@ -70,7 +68,6 @@ export default function ContactPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Information */}
             <div className="space-y-8">
               <div>
                 <h2 className="text-3xl font-bold text-gray-900 mb-6">Get In Touch</h2>
@@ -79,8 +76,6 @@ export default function ContactPage() {
                   our experienced team is ready to assist you every step of the way.
                 </p>
               </div>
-
-              {/* Contact Details */}
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
                   <div className="bg-amber-100 p-3 rounded-lg">
@@ -129,14 +124,8 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-
-            {/* Contact Form */}
             <div className="bg-white p-8 rounded-xl shadow-lg">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
-
-              {/* Status Messages */}
-
-
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -228,7 +217,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   );

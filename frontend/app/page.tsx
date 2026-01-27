@@ -36,7 +36,7 @@ export default function HomePage() {
         property.tags.includes(selectedTag)
       ));
     }
-    setCurrentPage(1); 
+    setCurrentPage(1);
   }, [selectedTag, properties]);
 
   const tags = ['all', 'new', 'fast-filling', 'sold-out', 'trending'];
@@ -137,8 +137,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-
-      {/* Hero Section */}
       <section className="bg-gradient-to-r from-amber-50 to-orange-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl font-bold text-gray-900 mb-6">
@@ -151,7 +149,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Filter Section */}
       <section className="py-8 bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap justify-center gap-4">
@@ -170,8 +167,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Properties Grid */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-8">
@@ -188,7 +183,6 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {currentProperties.map((property) => (
               <div key={property.id} className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
-                {/* Image */}
                 <div className="relative">
                   <div className="absolute top-12 right-3 z-10">
                     <SavedListingButton
@@ -202,7 +196,6 @@ export default function HomePage() {
                     alt={property.title}
                     className="w-full h-48 object-cover"
                   />
-                  {/* Tags */}
                   <div className="absolute top-3 left-3 flex flex-wrap gap-2">
                     {property.tags.map((tag) => (
                       <span
@@ -213,7 +206,6 @@ export default function HomePage() {
                       </span>
                     ))}
                   </div>
-                  {/* Quick View Button */}
                   <button
                     onClick={() => openQuickView(property)}
                     className="absolute top-3 right-3 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
@@ -222,7 +214,6 @@ export default function HomePage() {
                   </button>
                 </div>
 
-                {/* Content */}
                 <div className="p-6">
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     {property.title}
@@ -274,7 +265,6 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex justify-center items-center mt-12 space-x-4">
               <button
@@ -310,7 +300,6 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* View All Properties Link */}
           {filteredProperties.length > propertiesPerPage && (
             <div className="text-center mt-8">
               <Link
@@ -325,11 +314,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Quick View Modal */}
       {showQuickView && selectedProperty && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b">
               <h2 className="text-2xl font-bold text-gray-900">{selectedProperty.title}</h2>
               <button
@@ -341,9 +328,7 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
-              {/* Left Column - Images and Details */}
               <div className="space-y-6">
-                {/* Image Gallery */}
                 <div className="relative">
                   <img
                     src={selectedProperty.images[currentImageIndex]}
@@ -368,7 +353,6 @@ export default function HomePage() {
                   )}
                 </div>
 
-                {/* Property Details */}
                 <div className="space-y-4">
                   <div className="flex items-center text-gray-600">
                     <MapPin className="w-5 h-5 mr-2" />
@@ -412,8 +396,6 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-
-              {/* Right Column - Enquiry Form */}
               <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Quick Enquiry</h3>
 

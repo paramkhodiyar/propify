@@ -10,6 +10,9 @@ import { useProperties } from '@/contexts/PropertyContext';
 import SavedListingButton from '@/components/SavedListingButton';
 import { Search, Filter, MapPin, Bed, Bath, Square, X, Send, Eye, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import axios from "axios";
+import { FaCheckCircle, FaSpinner, FaServer, FaExclamationCircle } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 export default function HomePage() {
   const { properties, loading } = useProperties();
@@ -27,6 +30,63 @@ export default function HomePage() {
   const [isEnquirySubmitted, setIsEnquirySubmitted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const propertiesPerPage = 6;
+
+  const [serverReady, setServerReady] = useState(false);
+  const [steps, setSteps] = useState([
+    { id: 1, label: "Cranking up the servers...", status: "pending" },
+    { id: 2, label: "Polishing the experience...", status: "pending" },
+    { id: 3, label: "Loading the properties...", status: "pending" },
+  ]);
+  const [error, setError] = useState<string | null>(null);
+
+  const isProd = process.env.NEXT_PUBLIC_IS_PROD === "true";
+  const URL = "http://localhost:4000"; // Using local backend port directly as verified
+
+  useEffect(() => {
+    startChecks();
+  }, []);
+
+  const updateStep = (id: number, status: string) => {
+    setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, status } : s)));
+  };
+
+  const startChecks = async () => {
+    try {
+      setError(null);
+      updateStep(1, "loading");
+
+      const start = Date.now();
+      try {
+        await axios.get(`${URL}/`); // Root endpoint returns "Propify Real Estate Backend is Running"
+      } catch (e: any) {
+        if (!e.response) throw e;
+      }
+      const duration = Date.now() - start;
+
+      updateStep(1, "success");
+      updateStep(2, "loading");
+      await new Promise((r) => setTimeout(r, duration > 1000 ? 1000 : 500));
+      updateStep(2, "success");
+      updateStep(3, "loading");
+      await new Promise((r) => setTimeout(r, 600));
+      updateStep(3, "success");
+
+      setTimeout(() => setServerReady(true), 500);
+    } catch (err) {
+      console.error(err);
+      updateStep(1, "error");
+      setError("The servers are on strike. Server is unresponsive.");
+    }
+  };
+
+  const handleRetry = () => {
+    setSteps([
+      { id: 1, label: "Cranking up the servers...", status: "pending" },
+      { id: 2, label: "Polishing the experience...", status: "pending" },
+      { id: 3, label: "Loading the properties...", status: "pending" },
+    ]);
+    startChecks();
+  };
 
   useEffect(() => {
     if (selectedTag === 'all') {
@@ -122,6 +182,66 @@ export default function HomePage() {
         return tag.charAt(0).toUpperCase() + tag.slice(1);
     }
   };
+
+  if (!serverReady) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-white flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl border border-amber-100 p-8">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+              <FaServer className="text-2xl text-amber-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-800">System Check</h1>
+            <p className="text-gray-500 text-sm mt-1">
+              Establishing secure connection...
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {steps.map((step) => (
+              <motion.div
+                key={step.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`flex items-center p-3 rounded-lg border transition-colors ${step.status === "pending"
+                  ? "border-transparent text-gray-400"
+                  : step.status === "loading"
+                    ? "border-amber-200 bg-amber-50 text-amber-800"
+                    : step.status === "success"
+                      ? "border-green-100 bg-green-50 text-green-800"
+                      : "border-red-100 bg-red-50 text-red-800"
+                  }`}
+              >
+                <div className="flex-shrink-0 w-8">
+                  {step.status === "loading" && (
+                    <FaSpinner className="animate-spin" />
+                  )}
+                  {step.status === "success" && <FaCheckCircle />}
+                  {step.status === "error" && <FaExclamationCircle />}
+                  {step.status === "pending" && (
+                    <div className="w-4 h-4 rounded-full border-2 border-gray-200" />
+                  )}
+                </div>
+                <span className="text-sm font-medium">{step.label}</span>
+              </motion.div>
+            ))}
+          </div>
+
+          {error && (
+            <div className="mt-6 text-center">
+              <p className="text-[#991a1a] text-sm mb-4">{error}</p>
+              <button
+                onClick={handleRetry}
+                className="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition shadow-md"
+              >
+                Retry Connection
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

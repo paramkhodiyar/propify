@@ -40,7 +40,7 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
 
   const isProd = process.env.NEXT_PUBLIC_MODE === "PRODUCTION";
-  const URL = isProd ? "https://propify-g2n5.onrender.com" : "http://localhost:4000";
+  const URL = isProd ? "https://propify-oer3.onrender.com" : "http://localhost:4000";
 
   useEffect(() => {
     startChecks();

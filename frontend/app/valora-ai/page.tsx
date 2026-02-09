@@ -109,7 +109,7 @@ export default function ValoraAIPage() {
         const toastId = toast.loading("ValoraAI is analyzing market data...");
 
         try {
-            const res = await fetch("https://mayaai-microservice.onrender.com/predict", {
+            const res = await fetch("https://mayaai-microservice-zvl5.onrender.com/predict", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),

@@ -235,10 +235,23 @@ export default function ValoraAIPage() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Field label="Furnish Status">
-                                    <input type="number" name="furnish" value={form.furnish} onChange={handleChange} className="input" required min="0" />
+                                    <select name="furnish" value={form.furnish} onChange={handleChange} className="input" required>
+                                        <option value="0">Unfurnished</option>
+                                        <option value="1">Semi-Furnished</option>
+                                        <option value="2">Fully Furnished</option>
+                                    </select>
                                 </Field>
                                 <Field label="Facing">
-                                    <input type="number" name="facing" value={form.facing} onChange={handleChange} className="input" required min="0" />
+                                    <select name="facing" value={form.facing} onChange={handleChange} className="input" required>
+                                        <option value="0">North</option>
+                                        <option value="1">East</option>
+                                        <option value="2">South</option>
+                                        <option value="3">West</option>
+                                        <option value="4">North-East</option>
+                                        <option value="5">North-West</option>
+                                        <option value="6">South-East</option>
+                                        <option value="7">South-West</option>
+                                    </select>
                                 </Field>
                             </div>
 

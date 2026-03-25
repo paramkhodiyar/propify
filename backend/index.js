@@ -12,7 +12,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://propify-gamma.vercel.app', 'https://mayaai-microservice.onrender.com'],
+    origin: ['http://localhost:3000', 'https://propify-gamma.vercel.app', 'https://mayaai-microservice.onrender.com', 'https://propify-web.vercel.app'],
     credentials: true
 }));
 
